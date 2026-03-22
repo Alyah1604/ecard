@@ -3,382 +3,433 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>E-Card System — Mfumo wa Mialiko ya Kidijitali</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>E-Card Tanzania — Mfumo wa Mialiko</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 :root{
-  --primary:#1A1A2E;--primary-light:#16213E;--gold:#C9A84C;--gold-light:#F5E6C8;
-  --green:#1B5E20;--green-light:#E8F5E9;--red:#B71C1C;--red-light:#FFEBEE;
-  --amber:#E65100;--amber-light:#FFF3E0;--blue:#1565C0;--blue-light:#E3F2FD;
-  --bg:#F8F6F2;--panel:#FFFFFF;--text:#1A1A1A;--muted:#6B6B6B;
-  --border:#E5E0D8;--radius:12px;--shadow:0 2px 16px rgba(0,0,0,0.08);
+  --p:#1A1A2E;--pl:#16213E;--gold:#C9A84C;--gl:#FDF6E3;
+  --gr:#1B5E20;--grl:#E8F5E9;--rd:#B71C1C;--rdl:#FFEBEE;
+  --am:#E65100;--aml:#FFF3E0;--bl:#1565C0;--bll:#E3F2FD;
+  --bg:#F8F5F0;--panel:#FFF;--txt:#1A1A1A;--mt:#6B6B6B;
+  --br:#E5DDD0;--r:12px;--sh:0 2px 16px rgba(0,0,0,0.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
-.screen{display:none;min-height:100vh;}
-.screen.active{display:block;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;min-height:100vh;}
+.screen{display:none;min-height:100vh;}.screen.active{display:block;}
 
 /* WELCOME */
-.welcome{min-height:100vh;background:linear-gradient(135deg,#1A1A2E 0%,#16213E 50%,#0F3460 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;}
-.welcome-logo{font-size:56px;margin-bottom:16px;}
-.welcome-title{font-family:'Playfair Display',serif;font-size:30px;color:var(--gold);margin-bottom:6px;}
-.welcome-sub{font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:40px;line-height:1.7;}
-.welcome-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;}
-.w-btn{padding:14px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
-.w-btn-gold{background:var(--gold);color:#1A1A2E;}
-.w-btn-outline{background:rgba(255,255,255,0.08);color:white;border:1.5px solid rgba(255,255,255,0.25);}
-.w-btn-sm{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);font-size:12px;padding:10px;}
+.welcome{min-height:100vh;background:linear-gradient(160deg,#0D0D1A 0%,#1A1A2E 50%,#16213E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;}
+.w-logo{font-size:52px;margin-bottom:16px;}
+.w-title{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);margin-bottom:6px;}
+.w-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:40px;line-height:1.8;}
+.w-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;}
+.wb{padding:14px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
+.wb-gold{background:var(--gold);color:#1A1A2E;}
+.wb-out{background:rgba(255,255,255,0.08);color:white;border:1.5px solid rgba(255,255,255,0.25);}
+.wb-sm{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.12);font-size:12px;padding:10px;}
 
 /* TOPBAR */
-.topbar{background:var(--primary);color:white;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.topbar{background:var(--p);color:white;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.3);}
 .topbar-title{font-size:15px;font-weight:700;color:var(--gold);}
 .topbar-sub{font-size:11px;opacity:0.6;margin-top:1px;}
 .logout-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;}
 
-/* LAYOUT */
-.page-wrap{padding:16px;max-width:540px;margin:0 auto;padding-bottom:30px;}
-.admin-wrap{padding:16px;max-width:1100px;margin:0 auto;padding-bottom:30px;}
+.pw{padding:16px;max-width:560px;margin:0 auto;padding-bottom:30px;}
+.aw{padding:16px;max-width:1100px;margin:0 auto;padding-bottom:30px;}
 
-/* CARDS */
-.card{background:var(--panel);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;border:1px solid var(--border);}
-.card-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+/* CARD */
+.card{background:var(--panel);border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:14px;border:1px solid var(--br);}
+.card-title{font-size:11px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
 
 /* STATS */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
-.stat-card{background:var(--panel);border-radius:var(--radius);padding:14px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow);}
-.stat-num{font-size:22px;font-weight:700;color:var(--primary);}
-.stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.sc{background:var(--panel);border-radius:var(--r);padding:14px;text-align:center;border:1px solid var(--br);box-shadow:var(--sh);}
+.sn{font-size:20px;font-weight:700;color:var(--p);}
+.sl{font-size:11px;color:var(--mt);margin-top:3px;}
 
 /* FORMS */
-.form-group{margin-bottom:12px;}
-.form-group label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
-.form-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:white;color:var(--text);outline:none;transition:border-color 0.2s;}
-.form-input:focus{border-color:var(--gold);}
-.form-select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:white;color:var(--text);outline:none;cursor:pointer;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.form-grid .full{grid-column:1/-1;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--mt);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
+.fi{width:100%;padding:11px 13px;border:1.5px solid var(--br);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:white;color:var(--txt);outline:none;transition:border-color 0.2s;}
+.fi:focus{border-color:var(--gold);}
+.fsel{width:100%;padding:11px 13px;border:1.5px solid var(--br);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:white;color:var(--txt);outline:none;cursor:pointer;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fgrid .full{grid-column:1/-1;}
 
 /* BUTTONS */
-.btn{padding:12px 20px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.btn{padding:11px 18px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
 .btn-block{width:100%;justify-content:center;}
-.btn-primary{background:var(--primary);color:white;}
-.btn-gold{background:var(--gold);color:#1A1A2E;}
-.btn-green{background:var(--green);color:white;}
-.btn-red{background:var(--red);color:white;}
-.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary);}
-.btn-sm{padding:6px 12px;font-size:11px;border-radius:6px;}
+.btn-p{background:var(--p);color:white;}
+.btn-g{background:var(--gold);color:#1A1A2E;}
+.btn-gr{background:var(--gr);color:white;}
+.btn-r{background:var(--rd);color:white;}
+.btn-out{background:white;color:var(--p);border:1.5px solid var(--p);}
+.btn-sm{padding:5px 11px;font-size:11px;border-radius:6px;}
 .btn:disabled{opacity:0.5;cursor:not-allowed;}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
-.badge-gold{background:var(--gold-light);color:var(--amber);}
-.badge-green{background:var(--green-light);color:var(--green);}
-.badge-red{background:var(--red-light);color:var(--red);}
-.badge-gray{background:#F0EDE8;color:#555;}
-.badge-blue{background:var(--blue-light);color:var(--blue);}
+.bg-gold{background:var(--gl);color:var(--am);}
+.bg-gr{background:var(--grl);color:var(--gr);}
+.bg-rd{background:var(--rdl);color:var(--rd);}
+.bg-gray{background:#F0EDE8;color:#555;}
+.bg-vip{background:linear-gradient(90deg,#FFD700,#FFA500);color:#1A1A2E;}
+.bg-bl{background:var(--bll);color:var(--bl);}
 
 /* ALERTS */
-.alert{padding:12px 14px;border-radius:8px;margin-bottom:12px;font-size:13px;line-height:1.5;}
-.alert-success{background:var(--green-light);color:var(--green);border:1px solid #A5D6A7;}
-.alert-error{background:var(--red-light);color:var(--red);border:1px solid #FFCDD2;}
-.alert-info{background:var(--blue-light);color:var(--blue);border:1px solid #BBDEFB;}
-.alert-warning{background:var(--amber-light);color:var(--amber);border:1px solid #FFCC80;}
+.al{padding:12px 14px;border-radius:8px;margin-bottom:12px;font-size:13px;line-height:1.5;}
+.al-s{background:var(--grl);color:var(--gr);border:1px solid #A5D6A7;}
+.al-e{background:var(--rdl);color:var(--rd);border:1px solid #FFCDD2;}
+.al-i{background:var(--bll);color:var(--bl);border:1px solid #BBDEFB;}
+.al-w{background:var(--aml);color:var(--am);border:1px solid #FFCC80;}
 
 /* TABS */
-.tabs{display:flex;background:var(--panel);border-radius:10px;padding:4px;margin-bottom:14px;box-shadow:var(--shadow);overflow-x:auto;gap:2px;}
-.tab{flex:1;padding:9px 8px;text-align:center;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all 0.2s;white-space:nowrap;min-width:80px;}
-.tab.active{background:var(--primary);color:white;}
+.tabs{display:flex;background:var(--panel);border-radius:10px;padding:4px;margin-bottom:14px;box-shadow:var(--sh);overflow-x:auto;gap:2px;}
+.tab{flex:1;padding:9px 6px;text-align:center;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;color:var(--mt);transition:all 0.2s;white-space:nowrap;min-width:70px;}
+.tab.active{background:var(--p);color:white;}
 
 /* TABLE */
-.table-wrap{overflow-x:auto;}
+.tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;min-width:400px;}
-th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;background:#FAFAF8;border-bottom:1px solid var(--border);}
-td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--mt);text-transform:uppercase;background:#FAFAF7;border-bottom:1px solid var(--br);}
+td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--br);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:#FAFAF8;}
+tr:hover td{background:#FAFAF7;}
 
-/* EVENT CARD IN LIST */
-.event-card{background:var(--panel);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;align-items:flex-start;gap:14px;}
-.event-icon{font-size:28px;flex-shrink:0;}
-.event-info{flex:1;}
-.event-name{font-weight:700;font-size:15px;font-family:'Playfair Display',serif;}
-.event-detail{font-size:12px;color:var(--muted);margin-top:3px;}
-.event-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+/* ═══════════════════════════════════
+   E-CARD DESIGN — THE BEAUTIFUL CARD
+   ═══════════════════════════════════ */
+.ecard-outer{padding:16px;display:flex;justify-content:center;}
+.ecard{width:100%;max-width:400px;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.18);position:relative;font-family:'Inter',sans-serif;}
 
-/* ═══ E-CARD DESIGN ═══ */
-.ecard-wrapper{padding:20px;background:var(--bg);display:flex;flex-direction:column;align-items:center;}
-.ecard{width:100%;max-width:420px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);position:relative;}
-.ecard-header{padding:28px 24px 20px;text-align:center;position:relative;}
-.ecard-roses{position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.08;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='%23C9A84C' stroke-width='1'/%3E%3Ccircle cx='30' cy='30' r='12' fill='none' stroke='%23C9A84C' stroke-width='0.5'/%3E%3C/svg%3E");background-size:60px 60px;}
-.ecard-border{position:absolute;inset:8px;border:1.5px solid;border-radius:10px;opacity:0.3;pointer-events:none;}
-.ecard-aina{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:0.8;margin-bottom:10px;font-weight:600;}
-.ecard-familia{font-size:12px;opacity:0.75;margin-bottom:8px;line-height:1.5;}
-.ecard-mgeni{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
-.ecard-ujumbe{font-size:12px;opacity:0.8;margin-bottom:12px;line-height:1.5;}
-.ecard-jina-mkuu{font-family:'Playfair Display',serif;font-size:26px;font-style:italic;font-weight:600;margin:8px 0;}
-.ecard-divider{height:1px;opacity:0.3;margin:14px 24px;}
-.ecard-details{padding:0 24px 16px;}
-.ecard-detail-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
-.ecard-detail-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
-.ecard-detail-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;}
-.ecard-detail-value{font-size:13px;font-weight:600;margin-top:1px;}
-.ecard-footer{padding:14px 24px 20px;display:flex;justify-content:space-between;align-items:flex-end;}
-.ecard-card-num{font-size:10px;opacity:0.6;font-weight:500;}
-.ecard-barcode-wrap{text-align:center;}
-.ecard-qr{width:70px;height:70px;}
-.ecard-rsvp{padding:16px 24px;display:flex;gap:10px;}
-.rsvp-btn{flex:1;padding:12px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-.rsvp-nakuja{background:var(--green);color:white;}
-.rsvp-sitakuja{background:#F5F5F5;color:#666;border:1px solid #DDD;}
-.ecard-note{padding:10px 24px 16px;font-size:11px;text-align:center;opacity:0.6;font-style:italic;}
+/* Top decorative bar */
+.ec-topbar{height:8px;}
 
-/* SCANNER */
-.scanner-box{background:#000;border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;}
-.scanner-frame{width:200px;height:200px;border:3px solid var(--gold);border-radius:12px;margin:0 auto;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:40px;}
-.scan-result{background:var(--panel);border-radius:var(--radius);padding:16px;margin-top:14px;border:1px solid var(--border);}
+/* Floral corners overlay */
+.ec-floral{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
+.ec-floral::before{content:'❀';position:absolute;top:8px;left:8px;font-size:28px;opacity:0.12;}
+.ec-floral::after{content:'❀';position:absolute;top:8px;right:8px;font-size:28px;opacity:0.12;transform:scaleX(-1);}
 
-/* PLEDGE FORM */
-.pledge-hero{background:linear-gradient(135deg,var(--primary) 0%,#0F3460 100%);border-radius:var(--radius);padding:20px;color:white;text-align:center;margin-bottom:14px;}
-.pledge-event-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);margin-bottom:4px;}
-.pledge-detail{font-size:12px;opacity:0.75;}
+/* Header section */
+.ec-header{padding:22px 22px 16px;text-align:center;position:relative;}
+.ec-border-frame{position:absolute;inset:8px;border:1.5px solid;border-radius:10px;opacity:0.25;pointer-events:none;}
+.ec-type-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.ec-familia{font-size:12px;font-weight:500;opacity:0.8;line-height:1.6;margin-bottom:10px;}
+.ec-guest-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;line-height:1.2;}
+.ec-event-phrase{font-size:12px;opacity:0.75;margin-bottom:8px;line-height:1.5;}
+.ec-event-name{font-family:'Great Vibes',cursive;font-size:30px;margin:4px 0 8px;}
+.ec-divider{height:1px;opacity:0.2;margin:0 20px 14px;}
+
+/* Card type section */
+.ec-card-type-row{display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.ec-type-chip{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;border:1.5px solid;}
+
+/* Details section */
+.ec-details{padding:0 20px 14px;}
+.ec-detail-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.ec-det-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.ec-det-body{flex:1;}
+.ec-det-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;opacity:0.65;}
+.ec-det-val{font-size:13px;font-weight:600;margin-top:1px;line-height:1.4;}
+.ec-det-link{font-size:12px;font-weight:500;margin-top:2px;}
+
+/* Committee section */
+.ec-kamati{padding:10px 20px;margin:0 12px 12px;border-radius:8px;}
+.ec-kamati-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:0.7;margin-bottom:8px;text-align:center;}
+.ec-kamati-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.ec-kamati-item{text-align:center;}
+.ec-kamati-role{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;opacity:0.65;}
+.ec-kamati-jina{font-size:11px;font-weight:600;margin-top:2px;}
+.ec-kamati-simu{font-size:10px;opacity:0.7;margin-top:1px;}
+
+/* Footer with QR and table */
+.ec-footer{padding:14px 20px 16px;display:flex;justify-content:space-between;align-items:flex-end;}
+.ec-footer-left{}
+.ec-card-num-lbl{font-size:9px;opacity:0.55;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;}
+.ec-card-num{font-family:monospace;font-size:15px;font-weight:700;margin-top:2px;}
+.ec-table-num{margin-top:8px;}
+.ec-table-lbl{font-size:9px;opacity:0.55;text-transform:uppercase;letter-spacing:0.5px;}
+.ec-table-val{font-size:22px;font-weight:700;margin-top:1px;}
+.ec-qr-wrap{text-align:center;}
+.ec-qr-lbl{font-size:9px;opacity:0.55;margin-top:4px;letter-spacing:0.5px;text-transform:uppercase;}
+
+/* RSVP section */
+.ec-rsvp{display:flex;gap:8px;padding:12px 16px;}
+.ec-rsvp-btn{flex:1;padding:11px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+
+/* Bottom brand */
+.ec-brand{padding:8px;text-align:center;font-size:10px;opacity:0.5;font-style:italic;}
+
+/* Note */
+.ec-note{padding:8px 16px 12px;text-align:center;font-size:11px;font-style:italic;opacity:0.7;}
+
+/* WA */
+.wa-btn{width:100%;background:#25D366;color:white;border:none;padding:13px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;text-decoration:none;}
+.wa-btn svg{width:18px;height:18px;fill:white;flex-shrink:0;}
+
+/* SHARE BUTTONS */
+.share-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.share-btn{flex:1;padding:11px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;min-width:120px;display:flex;align-items:center;justify-content:center;gap:6px;}
+
+/* GUEST ROW */
+.gr-row{display:flex;align-items:center;gap:10px;padding:12px;background:var(--panel);border-radius:10px;margin-bottom:8px;border:1px solid var(--br);box-shadow:var(--sh);}
+.gr-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
+.gr-info{flex:1;}
+.gr-name{font-weight:600;font-size:13px;}
+.gr-detail{font-size:11px;color:var(--mt);margin-top:2px;}
+
+/* EVENT CARD */
+.ev-card{background:var(--panel);border-radius:var(--r);border:1px solid var(--br);padding:16px;margin-bottom:10px;box-shadow:var(--sh);}
+.ev-icon{font-size:26px;}
+.ev-name{font-weight:700;font-size:15px;font-family:'Playfair Display',serif;}
+.ev-detail{font-size:12px;color:var(--mt);margin-top:3px;}
 
 /* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
 .modal-bg.open{display:flex;}
-.modal-box{background:white;border-radius:16px;padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
+.modal-box{background:white;border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
-.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
-
-/* WA BTN */
-.wa-btn{width:100%;background:#25D366;color:white;border:none;padding:13px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;}
-.wa-btn svg{width:18px;height:18px;fill:white;}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--mt);}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#323232;color:white;padding:11px 22px;border-radius:24px;font-size:13px;z-index:9999;transition:transform 0.4s;box-shadow:0 4px 12px rgba(0,0,0,0.3);white-space:nowrap;max-width:90vw;text-align:center;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-/* PRINT KADI */
-@media print{
-  body *{visibility:hidden;}
-  .print-area, .print-area *{visibility:visible;}
-  .print-area{position:fixed;left:0;top:0;width:100%;}
-}
-
-@media(max-width:600px){.stat-grid{grid-template-columns:1fr 1fr;}.form-grid{grid-template-columns:1fr;}}
-@media(max-width:400px){.stat-grid{grid-template-columns:1fr;}}
+@media print{body *{visibility:hidden;}.print-area,.print-area *{visibility:visible;}.print-area{position:fixed;left:0;top:0;width:100%;}}
+@media(max-width:600px){.sg{grid-template-columns:1fr 1fr;}.fgrid{grid-template-columns:1fr;}}
+@media(max-width:400px){.sg{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- WELCOME -->
-<div class="screen active" id="screen-welcome">
+<!-- ═══ WELCOME ═══ -->
+<div class="screen active" id="s-welcome">
   <div class="welcome">
-    <div class="welcome-logo">💌</div>
-    <h1 class="welcome-title">E-Card Tanzania</h1>
-    <p class="welcome-sub">Mfumo wa Kisasa wa Mialiko ya Kidijitali<br>Harusi · Send-off · Kitchen Party · Sherehe Zote</p>
-    <div class="welcome-btns">
-      <button class="w-btn w-btn-gold" onclick="showScreen('screen-tukio-search')">🎟 Tafuta Tukio / Angalia Kadi</button>
-      <button class="w-btn w-btn-outline" onclick="showScreen('screen-pledge-public')">💝 Weka Ahadi ya Zawadi</button>
-      <button class="w-btn w-btn-sm" onclick="showScreen('screen-admin-login')">⚙ Msimamizi</button>
+    <div class="w-logo">💌</div>
+    <h1 class="w-title">E-Card Tanzania</h1>
+    <p class="w-sub">Mfumo wa Kisasa wa Mialiko ya Kidijitali<br>Harusi · Send-off · Kitchen Party · Sherehe Zote</p>
+    <div class="w-btns">
+      <button class="wb wb-gold" onclick="show('s-angalia')">🎟 Angalia Kadi Yangu</button>
+      <button class="wb wb-out" onclick="show('s-ahadi-pub')">💝 Weka Ahadi ya Zawadi</button>
+      <button class="wb wb-sm" onclick="show('s-admin-login')">⚙ Msimamizi</button>
     </div>
   </div>
 </div>
 
-<!-- TAFUTA TUKIO / ANGALIA KADI -->
-<div class="screen" id="screen-tukio-search">
-  <div style="background:var(--primary);padding:14px 18px;display:flex;align-items:center;gap:10px;">
-    <button onclick="showScreen('screen-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
+<!-- ═══ ANGALIA KADI ═══ -->
+<div class="screen" id="s-angalia">
+  <div style="background:var(--p);padding:14px 18px;display:flex;align-items:center;gap:10px;">
+    <button onclick="show('s-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
     <div><p style="color:var(--gold);font-weight:700;font-size:15px;">Angalia Kadi Yako</p></div>
   </div>
-  <div class="page-wrap">
+  <div class="pw">
     <div style="height:14px;"></div>
     <div class="card">
-      <div class="card-title">🎟 Ingiza Nambari ya Kadi au Tukio</div>
-      <div id="search-alert"></div>
-      <div class="form-group"><label>Nambari ya Kadi / Tukio</label><input type="text" class="form-input" id="search-input" placeholder="mfano: IMS36987 au EVT001" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')tafutaKadi()"/></div>
-      <button class="btn btn-gold btn-block" onclick="tafutaKadi()">🔍 Tafuta</button>
+      <div class="card-title">🎟 Ingiza Nambari ya Kadi Yako</div>
+      <div id="al-search"></div>
+      <div class="fg"><label>Nambari ya Kadi</label><input type="text" class="fi" id="search-in" placeholder="mfano: HAR00123" style="text-transform:uppercase;font-size:16px;letter-spacing:2px;" onkeydown="if(event.key==='Enter')angaliaKadi()"/></div>
+      <button class="btn btn-g btn-block" onclick="angaliaKadi()">🔍 Angalia Kadi</button>
     </div>
-    <div id="kadi-display"></div>
+    <div id="kadi-pub-display" class="print-area"></div>
   </div>
 </div>
 
-<!-- PLEDGE PUBLIC -->
-<div class="screen" id="screen-pledge-public">
-  <div style="background:var(--primary);padding:14px 18px;display:flex;align-items:center;gap:10px;">
-    <button onclick="showScreen('screen-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
-    <div><p style="color:var(--gold);font-weight:700;font-size:15px;">Weka Ahadi</p></div>
+<!-- ═══ AHADI PUBLIC ═══ -->
+<div class="screen" id="s-ahadi-pub">
+  <div style="background:var(--p);padding:14px 18px;display:flex;align-items:center;gap:10px;">
+    <button onclick="show('s-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
+    <div><p style="color:var(--gold);font-weight:700;font-size:15px;">Weka Ahadi ya Zawadi</p></div>
   </div>
-  <div class="page-wrap">
+  <div class="pw">
     <div style="height:14px;"></div>
     <div class="card">
-      <div class="card-title">🔍 Tafuta Tukio</div>
-      <div class="form-group"><label>Nambari ya Tukio</label><input type="text" class="form-input" id="pledge-tukio-search" placeholder="mfano: EVT001" style="text-transform:uppercase;"/></div>
-      <button class="btn btn-gold btn-block" onclick="tafutaTukioPledge()">Tafuta Tukio</button>
+      <div class="card-title">🔍 Ingiza Nambari ya Tukio</div>
+      <div class="fg"><input type="text" class="fi" id="ahadi-tukio-in" placeholder="mfano: EVT001" style="text-transform:uppercase;"/></div>
+      <button class="btn btn-g btn-block" onclick="tafutaTukioAhadi()">Tafuta Tukio</button>
     </div>
-    <div id="pledge-tukio-info"></div>
-    <div id="pledge-form-wrap" style="display:none;">
+    <div id="ahadi-tukio-display"></div>
+    <div id="ahadi-form-pub" style="display:none;">
       <div class="card">
         <div class="card-title">💝 Jaza Ahadi Yako</div>
-        <div id="pledge-alert"></div>
-        <div class="form-group"><label>Jina Lako Kamili</label><input type="text" class="form-input" id="pledge-jina" placeholder="Jina kamili"/></div>
-        <div class="form-group"><label>Namba ya Simu</label><input type="tel" class="form-input" id="pledge-simu" placeholder="0712345678"/></div>
-        <div class="form-group"><label>Kiasi cha Ahadi (TZS)</label><input type="number" class="form-input" id="pledge-kiasi" placeholder="50000"/></div>
-        <div class="form-group"><label>Ujumbe (hiari)</label><input type="text" class="form-input" id="pledge-ujumbe" placeholder="Pongezi na baraka..."/></div>
-        <button class="btn btn-gold btn-block" onclick="tutaAhadi()">💝 Tuma Ahadi</button>
+        <div id="al-ahadi-pub"></div>
+        <div class="fg"><label>Jina Lako Kamili</label><input type="text" class="fi" id="ap-jina" placeholder="Jina kamili"/></div>
+        <div class="fg"><label>Namba ya Simu</label><input type="tel" class="fi" id="ap-simu" placeholder="0712345678"/></div>
+        <div class="fg"><label>Kiasi cha Ahadi (TZS)</label><input type="number" class="fi" id="ap-kiasi" placeholder="50000"/></div>
+        <div class="fg"><label>Ujumbe wa Pongezi (hiari)</label><input type="text" class="fi" id="ap-msg" placeholder="Pongezi na baraka..."/></div>
+        <button class="btn btn-g btn-block" onclick="wasilishaAhadi()">💝 Tuma Ahadi</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN LOGIN -->
-<div class="screen" id="screen-admin-login">
-  <div style="background:var(--primary);padding:14px 18px;display:flex;align-items:center;gap:10px;">
-    <button onclick="showScreen('screen-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
+<!-- ═══ ADMIN LOGIN ═══ -->
+<div class="screen" id="s-admin-login">
+  <div style="background:var(--p);padding:14px 18px;display:flex;align-items:center;gap:10px;">
+    <button onclick="show('s-welcome')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">←</button>
     <div><p style="color:var(--gold);font-weight:700;font-size:15px;">Ingia — Msimamizi</p></div>
   </div>
-  <div class="page-wrap">
+  <div class="pw">
     <div style="height:14px;"></div>
     <div class="card">
-      <div class="card-title">⚙ Ingia kama Msimamizi</div>
-      <div id="admin-login-alert"></div>
-      <div class="form-group"><label>Nenosiri</label><input type="password" class="form-input" id="admin-pw" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
-      <button class="btn btn-primary btn-block" onclick="doAdminLogin()">Ingia</button>
+      <div class="card-title">⚙ Nenosiri la Msimamizi</div>
+      <div id="al-login"></div>
+      <div class="fg"><label>Nenosiri</label><input type="password" class="fi" id="admin-pw" onkeydown="if(event.key==='Enter')adminLogin()"/></div>
+      <button class="btn btn-p btn-block" onclick="adminLogin()">Ingia</button>
     </div>
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
-<div class="screen" id="screen-admin">
+<!-- ═══ ADMIN DASHBOARD ═══ -->
+<div class="screen" id="s-admin">
   <div class="topbar">
     <div><p class="topbar-title">💌 E-Card Tanzania</p><p class="topbar-sub">Dashibodi ya Msimamizi</p></div>
-    <button class="logout-btn" onclick="doAdminLogout()">Toka</button>
+    <button class="logout-btn" onclick="adminLogout()">Toka</button>
   </div>
-  <div class="admin-wrap">
+  <div class="aw">
     <div class="tabs">
-      <div class="tab active" id="atab-matukio-btn" onclick="showAdminTab('matukio')">🎉 Matukio</div>
-      <div class="tab" id="atab-wageni-btn" onclick="showAdminTab('wageni')">👥 Wageni</div>
-      <div class="tab" id="atab-kadi-btn" onclick="showAdminTab('kadi')">💌 Tengeneza Kadi</div>
-      <div class="tab" id="atab-ahadi-btn" onclick="showAdminTab('ahadi')">💰 Ahadi</div>
-      <div class="tab" id="atab-scan-btn" onclick="showAdminTab('scan')">📷 Scan</div>
+      <div class="tab active" id="at-ev-btn" onclick="aTab('ev')">🎉 Matukio</div>
+      <div class="tab" id="at-wa-btn" onclick="aTab('wa')">👥 Wageni</div>
+      <div class="tab" id="at-kd-btn" onclick="aTab('kd')">💌 Kadi</div>
+      <div class="tab" id="at-ah-btn" onclick="aTab('ah')">💰 Ahadi</div>
+      <div class="tab" id="at-sc-btn" onclick="aTab('sc')">📷 Scan</div>
     </div>
 
     <!-- MATUKIO TAB -->
-    <div id="atab-matukio">
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-num" id="a-total-matukio">0</div><div class="stat-lbl">Matukio</div></div>
-        <div class="stat-card"><div class="stat-num" id="a-total-wageni">0</div><div class="stat-lbl">Wageni Wote</div></div>
-        <div class="stat-card"><div class="stat-num" id="a-total-ahadi">0</div><div class="stat-lbl">Ahadi (000 TZS)</div></div>
-        <div class="stat-card"><div class="stat-num" id="a-total-lipa">0</div><div class="stat-lbl">Zilizolipwa (000)</div></div>
+    <div id="at-ev">
+      <div class="sg">
+        <div class="sc"><div class="sn" id="a-ev">0</div><div class="sl">Matukio</div></div>
+        <div class="sc"><div class="sn" id="a-wa">0</div><div class="sl">Wageni</div></div>
+        <div class="sc"><div class="sn" id="a-ah">0</div><div class="sl">Ahadi (000)</div></div>
+        <div class="sc"><div class="sn" id="a-lp">0</div><div class="sl">Zilizolipwa (000)</div></div>
       </div>
       <div class="card">
         <div class="card-title">➕ Unda Tukio Jipya</div>
-        <div id="tukio-alert"></div>
-        <div class="form-grid">
-          <div class="form-group full"><label>Jina la Tukio</label><input type="text" class="form-input" id="t-jina" placeholder="mfano: Harusi ya Janeth & Ivan"/></div>
-          <div class="form-group"><label>Aina ya Tukio</label>
-            <select class="form-select" id="t-aina">
-              <option>Harusi</option><option>Send-off</option><option>Kitchen Party</option>
-              <option>Birthday</option><option>Graduation</option><option>Nyingine</option>
-            </select>
+        <div id="al-tukio"></div>
+        <div class="fgrid">
+          <div class="fg full"><label>Jina la Tukio</label><input type="text" class="fi" id="t-jina" placeholder="mfano: Harusi ya Janeth & Ivan Muhizi"/></div>
+          <div class="fg"><label>Aina ya Tukio</label>
+            <select class="fsel" id="t-aina"><option>Harusi</option><option>Send-off</option><option>Kitchen Party</option><option>Birthday</option><option>Graduation</option><option>Nyingine</option></select>
           </div>
-          <div class="form-group"><label>Jina la Mwenyeji</label><input type="text" class="form-input" id="t-mwenyeji" placeholder="mfano: Familia ya Muhizi"/></div>
-          <div class="form-group"><label>Tarehe</label><input type="date" class="form-input" id="t-tarehe"/></div>
-          <div class="form-group"><label>Saa</label><input type="text" class="form-input" id="t-saa" placeholder="mfano: Saa 12 Jioni"/></div>
-          <div class="form-group full"><label>Ukumbi / Mahali</label><input type="text" class="form-input" id="t-ukumbi" placeholder="mfano: Mirado Hall, Sinza Igese Rd"/></div>
-          <div class="form-group full"><label>Kiungo cha Ramani (hiari)</label><input type="text" class="form-input" id="t-location" placeholder="https://maps.app.goo.gl/..."/></div>
-          <div class="form-group"><label>Dress Code (hiari)</label><input type="text" class="form-input" id="t-dress" placeholder="mfano: Formal · Rangi Nyekundu"/></div>
-          <div class="form-group"><label>Mawasiliano</label><input type="text" class="form-input" id="t-mawasiliano" placeholder="0767224342"/></div>
-          <div class="form-group full"><label>Ujumbe wa Ziada (hiari)</label><input type="text" class="form-input" id="t-ujumbe" placeholder="mfano: Watoto tunawapenda lakini hawaruhusiwi"/></div>
-          <div class="form-group"><label>Rangi Kuu ya Kadi</label><input type="color" class="form-input" id="t-rangi" value="#8B4513" style="height:44px;padding:4px;"/></div>
-          <div class="form-group"><label>Rangi ya Dhahabu</label><input type="color" class="form-input" id="t-rangi2" value="#C9A84C" style="height:44px;padding:4px;"/></div>
+          <div class="fg"><label>Jina la Familia / Mwenyeji</label><input type="text" class="fi" id="t-mwenyeji" placeholder="mfano: Mr & Mrs Muhizi"/></div>
+          <div class="fg"><label>Mahali (Mji / Mtaa)</label><input type="text" class="fi" id="t-mahali" placeholder="mfano: Yombo Vituka, Dar es Salaam"/></div>
+          <div class="fg"><label>Tarehe</label><input type="date" class="fi" id="t-tarehe"/></div>
+          <div class="fg"><label>Saa</label><input type="text" class="fi" id="t-saa" placeholder="Saa 12 Jioni"/></div>
+          <div class="fg full"><label>Ukumbi / Mahali pa Sherehe</label><input type="text" class="fi" id="t-ukumbi" placeholder="mfano: Mirado Hall, Sinza Igese Rd"/></div>
+          <div class="fg full"><label>Kiungo cha Ramani (hiari)</label><input type="text" class="fi" id="t-loc" placeholder="https://maps.app.goo.gl/..."/></div>
+          <div class="fg"><label>Dress Code (hiari)</label><input type="text" class="fi" id="t-dress" placeholder="Formal / Rangi Nyekundu"/></div>
+          <div class="fg"><label>Jumla ya Meza</label><input type="number" class="fi" id="t-meza" placeholder="10" value="10"/></div>
+          <div class="fg full"><label>Ujumbe wa Ziada (hiari)</label><input type="text" class="fi" id="t-ujumbe" placeholder="mfano: Watoto tunawapenda lakini hawaruhusiwi"/></div>
         </div>
-        <button class="btn btn-gold btn-block" onclick="undaTukio()" style="margin-top:6px;">✨ Unda Tukio</button>
+        <p style="font-size:11px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;">👥 Kamati ya Tukio</p>
+        <div class="fgrid">
+          <div class="fg"><label>Mwenyekiti — Jina</label><input type="text" class="fi" id="t-mw-jina" placeholder="Jina la mwenyekiti"/></div>
+          <div class="fg"><label>Mwenyekiti — Simu</label><input type="tel" class="fi" id="t-mw-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Katibu — Jina</label><input type="text" class="fi" id="t-kt-jina" placeholder="Jina la katibu"/></div>
+          <div class="fg"><label>Katibu — Simu</label><input type="tel" class="fi" id="t-kt-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Mweka Hazina — Jina</label><input type="text" class="fi" id="t-hz-jina" placeholder="Jina la mweka hazina"/></div>
+          <div class="fg"><label>Mweka Hazina — Simu</label><input type="tel" class="fi" id="t-hz-simu" placeholder="0712345678"/></div>
+        </div>
+        <p style="font-size:11px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;">🎨 Rangi za Kadi</p>
+        <div class="fgrid">
+          <div class="fg"><label>Rangi Kuu</label><input type="color" class="fi" id="t-rangi" value="#8B1A1A" style="height:44px;padding:4px;"/></div>
+          <div class="fg"><label>Rangi ya Dhahabu</label><input type="color" class="fi" id="t-rangi2" value="#C9A84C" style="height:44px;padding:4px;"/></div>
+        </div>
+        <button class="btn btn-g btn-block" onclick="undaTukio()" style="margin-top:8px;">✨ Unda Tukio</button>
       </div>
       <div id="matukio-list"></div>
     </div>
 
     <!-- WAGENI TAB -->
-    <div id="atab-wageni" style="display:none;">
+    <div id="at-wa" style="display:none;">
       <div class="card">
-        <div class="card-title">👥 Simamia Wageni</div>
-        <div class="form-group"><label>Chagua Tukio</label><select class="form-select" id="wageni-tukio-sel" onchange="loadWageniKwa()"></select></div>
+        <div class="card-title">🎉 Chagua Tukio</div>
+        <select class="fsel" id="wa-tukio-sel" onchange="loadWageni()"></select>
       </div>
       <div class="card">
         <div class="card-title">➕ Ongeza Mgeni</div>
-        <div id="mgeni-alert"></div>
-        <div class="form-grid">
-          <div class="form-group full"><label>Jina Kamili la Mgeni</label><input type="text" class="form-input" id="mgeni-jina" placeholder="Jina kamili"/></div>
-          <div class="form-group"><label>Namba ya Simu (hiari)</label><input type="tel" class="form-input" id="mgeni-simu" placeholder="0712345678"/></div>
+        <div id="al-mgeni"></div>
+        <div class="fgrid">
+          <div class="fg full"><label>Jina Kamili la Mgeni</label><input type="text" class="fi" id="mg-jina" placeholder="Jina kamili la mgeni"/></div>
+          <div class="fg"><label>Namba ya Simu</label><input type="tel" class="fi" id="mg-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Aina ya Kadi</label>
+            <select class="fsel" id="mg-aina">
+              <option value="Single">🧑 Single (Mtu Mmoja)</option>
+              <option value="Double">👫 Double (Watu Wawili)</option>
+              <option value="VIP">⭐ VIP / Special Guest</option>
+            </select>
+          </div>
+          <div class="fg"><label>Tarehe ya Malipo</label><input type="date" class="fi" id="mg-malipo"/></div>
         </div>
-        <button class="btn btn-gold btn-block" onclick="ongezaMgeni()" style="margin-top:6px;">➕ Ongeza Mgeni</button>
+        <button class="btn btn-g btn-block" onclick="ongezaMgeni()" style="margin-top:6px;">➕ Ongeza Mgeni</button>
       </div>
       <div class="card">
         <div class="card-title">📋 Orodha ya Wageni</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Jina</th><th>Nambari Kadi</th><th>RSVP</th><th>Kuingia</th><th>Vitendo</th></tr></thead>
+        <div class="tw"><table>
+          <thead><tr><th>Jina</th><th>Nambari Kadi</th><th>Aina</th><th>Meza</th><th>RSVP</th><th>Ameingia</th><th>Vitendo</th></tr></thead>
           <tbody id="wageni-tbody"></tbody>
         </table></div>
       </div>
     </div>
 
     <!-- KADI TAB -->
-    <div id="atab-kadi" style="display:none;">
+    <div id="at-kd" style="display:none;">
       <div class="card">
-        <div class="card-title">💌 Tengeneza na Tuma Kadi</div>
-        <div class="form-group"><label>Chagua Tukio</label><select class="form-select" id="kadi-tukio-sel" onchange="loadKadiWageni()"></select></div>
-        <div class="form-group"><label>Chagua Mgeni</label><select class="form-select" id="kadi-mgeni-sel"></select></div>
-        <button class="btn btn-gold" onclick="onesha Kadi()" style="margin-top:6px;">👁 Ona Kadi</button>
-        <button class="btn btn-primary" onclick="chapisha Kadi()" style="margin-top:6px;margin-left:8px;">🖨 Chapisha</button>
+        <div class="card-title">💌 Angalia na Tuma Kadi</div>
+        <div class="fg"><label>Tukio</label><select class="fsel" id="kd-tukio-sel" onchange="loadKadiWageni()"></select></div>
+        <div class="fg"><label>Mgeni</label><select class="fsel" id="kd-mgeni-sel"></select></div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-g" onclick="previewKadi()">👁 Ona Kadi</button>
+          <button class="btn btn-p" onclick="window.print()">🖨 Chapisha</button>
+        </div>
       </div>
-      <div id="kadi-preview" class="print-area"></div>
-      <div id="kadi-wa-wrap" style="display:none;" class="card">
-        <div class="card-title">📲 Tuma kwa WhatsApp</div>
-        <div id="kadi-wa-content"></div>
+      <div id="kadi-preview-wrap" class="print-area"></div>
+      <div id="kadi-share-wrap" style="display:none;" class="card">
+        <div class="card-title">📲 Shiriki Kadi</div>
+        <div id="kadi-share-content"></div>
       </div>
     </div>
 
     <!-- AHADI TAB -->
-    <div id="atab-ahadi" style="display:none;">
+    <div id="at-ah" style="display:none;">
       <div class="card">
-        <div class="card-title">💰 Simamia Ahadi</div>
-        <div class="form-group"><label>Chagua Tukio</label><select class="form-select" id="ahadi-tukio-sel" onchange="loadAhadiKwa()"></select></div>
+        <div class="card-title">💰 Chagua Tukio</div>
+        <select class="fsel" id="ah-tukio-sel" onchange="loadAhadi()"></select>
       </div>
-      <div class="stat-grid" id="ahadi-stats" style="display:none;"></div>
+      <div id="ah-stats" style="display:none;" class="sg"></div>
+      <div class="card">
+        <div class="card-title">➕ Ongeza Ahadi Mkononi</div>
+        <div id="al-ahadi"></div>
+        <div class="fgrid">
+          <div class="fg full"><label>Jina la Mtoaji</label><input type="text" class="fi" id="ah-jina" placeholder="Jina kamili"/></div>
+          <div class="fg"><label>Simu</label><input type="tel" class="fi" id="ah-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Kiasi (TZS)</label><input type="number" class="fi" id="ah-kiasi" placeholder="50000"/></div>
+          <div class="fg"><label>Hali</label><select class="fsel" id="ah-hali"><option value="ahadi">Ahadi tu</option><option value="imelipwa">Imelipwa</option></select></div>
+        </div>
+        <button class="btn btn-g btn-block" onclick="ongezaAhadi()" style="margin-top:6px;">💾 Hifadhi</button>
+      </div>
       <div class="card">
         <div class="card-title">📋 Orodha ya Ahadi</div>
-        <div class="table-wrap"><table>
+        <div class="tw"><table>
           <thead><tr><th>Jina</th><th>Simu</th><th>Kiasi</th><th>Hali</th><th>Tarehe</th><th>Kitendo</th></tr></thead>
           <tbody id="ahadi-tbody"></tbody>
         </table></div>
       </div>
-      <div class="card">
-        <div class="card-title">➕ Ongeza Ahadi Mkononi</div>
-        <div id="ahadi-add-alert"></div>
-        <div class="form-grid">
-          <div class="form-group full"><label>Jina la Mtoaji</label><input type="text" class="form-input" id="ahadi-jina" placeholder="Jina kamili"/></div>
-          <div class="form-group"><label>Simu</label><input type="tel" class="form-input" id="ahadi-simu" placeholder="0712345678"/></div>
-          <div class="form-group"><label>Kiasi (TZS)</label><input type="number" class="form-input" id="ahadi-kiasi" placeholder="50000"/></div>
-          <div class="form-group"><label>Hali</label><select class="form-select" id="ahadi-hali"><option value="ahadi">Ahadi tu</option><option value="imelipwa">Imelipwa</option></select></div>
-        </div>
-        <button class="btn btn-gold btn-block" onclick="ongezaAhadi()" style="margin-top:6px;">💾 Hifadhi Ahadi</button>
-      </div>
     </div>
 
     <!-- SCAN TAB -->
-    <div id="atab-scan" style="display:none;">
+    <div id="at-sc" style="display:none;">
       <div class="card">
-        <div class="card-title">📷 Scan Barcode / QR Code</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Ingiza nambari ya kadi mkononi kuthibitisha mgeni:</p>
-        <div class="form-group"><label>Nambari ya Kadi</label><input type="text" class="form-input" id="scan-input" placeholder="mfano: IMS36987" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')scanKadi()"/></div>
-        <button class="btn btn-gold btn-block" onclick="scanKadi()">✅ Thibitisha Mgeni</button>
+        <div class="card-title">📷 Thibitisha Mgeni kwa Nambari ya Kadi</div>
+        <p style="font-size:13px;color:var(--mt);margin-bottom:12px;">Scan QR Code kwa app ya simu yako au ingiza nambari hapa:</p>
+        <div class="fg"><label>Nambari ya Kadi</label><input type="text" class="fi" id="scan-in" placeholder="mfano: HAR00123" style="text-transform:uppercase;font-size:16px;" onkeydown="if(event.key==='Enter')scanKadi()"/></div>
+        <button class="btn btn-g btn-block" onclick="scanKadi()">✅ Thibitisha Mgeni</button>
         <div id="scan-result" style="margin-top:14px;"></div>
       </div>
       <div class="card">
-        <div class="card-title">📋 Wageni Walioingia Leo</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Jina</th><th>Nambari Kadi</th><th>Tukio</th><th>Saa ya Kuingia</th></tr></thead>
+        <div class="card-title">📋 Walioingia Leo</div>
+        <div class="tw"><table>
+          <thead><tr><th>Jina</th><th>Kadi</th><th>Aina</th><th>Meza</th><th>Saa</th></tr></thead>
           <tbody id="walioingia-tbody"></tbody>
         </table></div>
       </div>
@@ -387,10 +438,10 @@ tr:hover td{background:#FAFAF8;}
 </div>
 
 <!-- MODAL -->
-<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
+<div class="modal-bg" id="modal-bg" onclick="closeMod(event)">
   <div class="modal-box">
-    <div class="modal-title"><span id="modal-title-txt">—</span><button class="modal-close" onclick="closeModalDirect()">✕</button></div>
-    <div id="modal-body"></div>
+    <div class="modal-title"><span id="mod-title">—</span><button class="modal-close" onclick="closeModDirect()">✕</button></div>
+    <div id="mod-body"></div>
   </div>
 </div>
 
@@ -398,168 +449,159 @@ tr:hover td{background:#FAFAF8;}
 
 <script>
 // ═══ CONFIG ═══
-const SB_URL='https://rdnozraqruiyqlkyhcsc.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkbm96cmFxcnVpeXFsa3loY3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxODE3NTgsImV4cCI6MjA4OTc1Nzc1OH0.KL8x2QNkTGwdwpMdtKabTqvMr7TKu8vzKMP2DMRwzeI';
-const ADMIN_PASS='ecard2026';
+const SB='https://rdnozraqruiyqlkyhcsc.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkbm96cmFxcnVpeXFsa3loY3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxODE3NTgsImV4cCI6MjA4OTc1Nzc1OH0.KL8x2QNkTGwdwpMdtKabTqvMr7TKu8vzKMP2DMRwzeI';
+const AP='ecard2026';
+const SITE=window.location.origin+window.location.pathname;
 
-const H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+const H={'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=representation'};
 const DB={
-  async get(t,q=''){const r=await fetch(`${SB_URL}/rest/v1/${t}?${q}`,{headers:H});return r.json();},
-  async post(t,d){const r=await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers:H,body:JSON.stringify(d)});return r.json();},
-  async patch(t,f,d){const r=await fetch(`${SB_URL}/rest/v1/${t}?${f}`,{method:'PATCH',headers:H,body:JSON.stringify(d)});return r.json();},
-  async del(t,f){await fetch(`${SB_URL}/rest/v1/${t}?${f}`,{method:'DELETE',headers:H});}
+  async get(t,q=''){const r=await fetch(`${SB}/rest/v1/${t}?${q}`,{headers:H});return r.json();},
+  async post(t,d){const r=await fetch(`${SB}/rest/v1/${t}`,{method:'POST',headers:H,body:JSON.stringify(d)});return r.json();},
+  async patch(t,f,d){const r=await fetch(`${SB}/rest/v1/${t}?${f}`,{method:'PATCH',headers:H,body:JSON.stringify(d)});return r.json();},
+  async del(t,f){await fetch(`${SB}/rest/v1/${t}?${f}`,{method:'DELETE',headers:H});}
 };
 
-let allMatukio=[], allWageni=[], allAhadi=[];
-let currentTukio=null, currentMgeni=null;
+let AM=[],AW=[],AA=[];
 
 // ═══ HELPERS ═══
-function $(id){return document.getElementById(id);}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);}
-function pesa(n){return'TZS '+(n||0).toLocaleString()+'/=';}
-function leoISO(){return new Date().toISOString().slice(0,10);}
-function uid6(){return Math.random().toString(36).substr(2,6).toUpperCase();}
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-function setAlert(id,msg,type='info'){const el=$(id);if(!el)return;el.innerHTML=msg?`<div class="alert alert-${type}">${msg}</div>`:'';}
-function openModal(title,body){$('modal-title-txt').textContent=title;$('modal-body').innerHTML=body;$('modal-bg').classList.add('open');}
-function closeModal(e){if(e.target===$('modal-bg'))closeModalDirect();}
-function closeModalDirect(){$('modal-bg').classList.remove('open');}
-function ainaIcon(aina){const m={'Harusi':'💒','Send-off':'🌸','Kitchen Party':'🍽','Birthday':'🎂','Graduation':'🎓','Nyingine':'🎉'};return m[aina]||'🎉';}
+const $=id=>document.getElementById(id);
+const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);};
+const pesa=n=>'TZS '+(n||0).toLocaleString()+'/=';
+const leo=()=>new Date().toISOString().slice(0,10);
+const uid=()=>Math.random().toString(36).substr(2,8).toUpperCase();
+const setAl=(id,msg,t='i')=>{const e=$(id);if(!e)return;e.innerHTML=msg?`<div class="al al-${t==='s'?'s':t==='e'?'e':t==='w'?'w':'i'}">${msg}</div>`:''};
+const toast=msg=>{const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);};
+const openMod=(title,body)=>{$('mod-title').textContent=title;$('mod-body').innerHTML=body;$('modal-bg').classList.add('open');};
+const closeMod=e=>{if(e.target===$('modal-bg'))closeModDirect();};
+const closeModDirect=()=>$('modal-bg').classList.remove('open');
+const ainaIcon=a=>({'Harusi':'💒','Send-off':'🌸','Kitchen Party':'🍽','Birthday':'🎂','Graduation':'🎓','Nyingine':'🎉'}[a]||'🎉');
 
-function nambariTukio(){return'EVT'+Date.now().toString().slice(-6);}
-function nambariKadi(prefix){return(prefix||'IMS')+Math.floor(10000+Math.random()*90000);}
-function generateBarcode(){return'BC'+Date.now().toString().slice(-8)+uid6();}
-
-// ═══ ADMIN AUTH ═══
-function doAdminLogin(){
-  if($('admin-pw').value===ADMIN_PASS){showScreen('screen-admin');loadAdminData();}
-  else{setAlert('admin-login-alert','Nenosiri si sahihi.','error');}
+function nambariKadi(aina,tukioJina){
+  const prefix=tukioJina.substring(0,3).toUpperCase();
+  const num=String(Math.floor(10000+Math.random()*90000));
+  return prefix+num;
 }
-function doAdminLogout(){showScreen('screen-welcome');}
+function nambariTukio(){return'EVT'+Date.now().toString().slice(-6);}
+function barcodeData(nambari){return SITE+'?kadi='+nambari;}
+function formatTarehe(d){
+  if(!d)return'—';
+  try{return new Date(d+'T00:00:00').toLocaleDateString('sw-TZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){return d;}
+}
 
-// ═══ LOAD DATA ═══
-async function loadAdminData(){
-  const [m,w,a]=await Promise.all([
-    DB.get('matukio','order=created_at.desc'),
-    DB.get('wageni','order=created_at.desc'),
-    DB.get('ahadi','order=created_at.desc')
-  ]);
-  allMatukio=Array.isArray(m)?m:[];
-  allWageni=Array.isArray(w)?w:[];
-  allAhadi=Array.isArray(a)?a:[];
-  renderStats();
-  renderMatukioList();
-  jaziTukioSelects();
-  loadWageniKwa();
-  loadAhadiKwa();
-  loadWalioingia();
-  $('t-tarehe').value=leoISO();
+// ═══ AUTH ═══
+function adminLogin(){
+  if($('admin-pw').value===AP){show('s-admin');loadAll();}
+  else{setAl('al-login','Nenosiri si sahihi.','e');}
+}
+function adminLogout(){show('s-welcome');}
+
+// ═══ LOAD ALL ═══
+async function loadAll(){
+  const [m,w,a]=await Promise.all([DB.get('matukio','order=created_at.desc'),DB.get('wageni','order=nambari_meza.asc,created_at.asc'),DB.get('ahadi','order=created_at.desc')]);
+  AM=Array.isArray(m)?m:[];AW=Array.isArray(w)?w:[];AA=Array.isArray(a)?a:[];
+  renderStats();renderMatukio();jaziSelects();loadWageni();loadAhadi();loadWalioingia();
+  $('t-tarehe').value=leo();$('mg-malipo').value=leo();
 }
 
 function renderStats(){
-  $('a-total-matukio').textContent=allMatukio.length;
-  $('a-total-wageni').textContent=allWageni.length;
-  const jumlaAhadi=allAhadi.reduce((s,a)=>s+a.kiasi,0);
-  const jumlaLipa=allAhadi.filter(a=>a.status==='imelipwa').reduce((s,a)=>s+a.kiasi,0);
-  $('a-total-ahadi').textContent=(jumlaAhadi/1000).toLocaleString();
-  $('a-total-lipa').textContent=(jumlaLipa/1000).toLocaleString();
+  $('a-ev').textContent=AM.length;$('a-wa').textContent=AW.length;
+  $('a-ah').textContent=(AA.reduce((s,a)=>s+a.kiasi,0)/1000).toLocaleString();
+  $('a-lp').textContent=(AA.filter(a=>a.status==='imelipwa').reduce((s,a)=>s+a.kiasi,0)/1000).toLocaleString();
 }
 
 // ═══ UNDA TUKIO ═══
 async function undaTukio(){
-  const jina=$('t-jina').value.trim();
-  const mwenyeji=$('t-mwenyeji').value.trim();
-  const tarehe=$('t-tarehe').value;
-  const saa=$('t-saa').value.trim();
-  const ukumbi=$('t-ukumbi').value.trim();
-  if(!jina||!mwenyeji||!tarehe||!saa||!ukumbi){setAlert('tukio-alert','Jaza sehemu zote zinazohitajika.','error');return;}
-  setAlert('tukio-alert','Inaunda tukio...','info');
-  try{
-    const result=await DB.post('matukio',{
-      nambari_tukio:nambariTukio(),jina_tukio:jina,aina:$('t-aina').value,
-      jina_mwenyeji:mwenyeji,tarehe,saa,ukumbi,
-      location_link:$('t-location').value.trim(),
-      dress_code:$('t-dress').value.trim(),
-      mawasiliano:$('t-mawasiliano').value.trim(),
-      ujumbe_ziada:$('t-ujumbe').value.trim(),
-      rangi_kadi:$('t-rangi').value,
-      rangi_pili:$('t-rangi2').value
-    });
-    if(Array.isArray(result)&&result[0]){
-      setAlert('tukio-alert',`✅ Tukio "${jina}" limeundwa! Nambari: <strong>${result[0].nambari_tukio}</strong>`,'success');
-      ['t-jina','t-mwenyeji','t-saa','t-ukumbi','t-location','t-dress','t-mawasiliano','t-ujumbe'].forEach(id=>{const el=$(id);if(el)el.value='';});
-      await loadAdminData();
-    }
-  }catch(e){setAlert('tukio-alert','Hitilafu: '+e.message,'error');}
+  const jina=$('t-jina').value.trim(),mwenyeji=$('t-mwenyeji').value.trim(),mahali=$('t-mahali').value.trim();
+  const tarehe=$('t-tarehe').value,saa=$('t-saa').value.trim(),ukumbi=$('t-ukumbi').value.trim();
+  if(!jina||!mwenyeji||!mahali||!tarehe||!saa||!ukumbi){setAl('al-tukio','Jaza sehemu zote zinazohitajika.','e');return;}
+  setAl('al-tukio','Inaunda...','i');
+  const r=await DB.post('matukio',{
+    nambari_tukio:nambariTukio(),jina_tukio:jina,aina:$('t-aina').value,
+    jina_mwenyeji:mwenyeji,mahali_mwenyeji:mahali,tarehe,saa,ukumbi,
+    location_link:$('t-loc').value.trim(),dress_code:$('t-dress').value.trim(),
+    jumla_meza:parseInt($('t-meza').value)||10,ujumbe_ziada:$('t-ujumbe').value.trim(),
+    mwenyekiti_jina:$('t-mw-jina').value.trim(),mwenyekiti_simu:$('t-mw-simu').value.trim(),
+    katibu_jina:$('t-kt-jina').value.trim(),katibu_simu:$('t-kt-simu').value.trim(),
+    hazina_jina:$('t-hz-jina').value.trim(),hazina_simu:$('t-hz-simu').value.trim(),
+    rangi_kuu:$('t-rangi').value,rangi_dhahabu:$('t-rangi2').value
+  });
+  if(Array.isArray(r)&&r[0]){
+    setAl('al-tukio',`✅ Tukio limeundwa! Nambari: <strong>${r[0].nambari_tukio}</strong>`,'s');
+    ['t-jina','t-mwenyeji','t-mahali','t-saa','t-ukumbi','t-loc','t-dress','t-ujumbe','t-mw-jina','t-mw-simu','t-kt-jina','t-kt-simu','t-hz-jina','t-hz-simu'].forEach(id=>{const e=$(id);if(e)e.value='';});
+    await loadAll();
+  }else{setAl('al-tukio','Hitilafu. Jaribu tena.','e');}
 }
 
-function renderMatukioList(){
-  if(!allMatukio.length){$('matukio-list').innerHTML='<p style="color:var(--muted);text-align:center;padding:20px;">Hakuna matukio bado. Unda tukio la kwanza!</p>';return;}
-  $('matukio-list').innerHTML=allMatukio.map(t=>{
-    const wageniCount=allWageni.filter(w=>w.tukio_id===t.id).length;
-    const ahadiSum=allAhadi.filter(a=>a.tukio_id===t.id).reduce((s,a)=>s+a.kiasi,0);
-    return`<div class="event-card">
-      <div class="event-icon">${ainaIcon(t.aina)}</div>
-      <div style="flex:1;">
-        <div class="event-name">${t.jina_tukio}</div>
-        <div class="event-detail">📅 ${t.tarehe} · 🕐 ${t.saa} · 📍 ${t.ukumbi}</div>
-        <div class="event-detail" style="margin-top:4px;">👥 Wageni: ${wageniCount} · 💰 Ahadi: ${pesa(ahadiSum)} · 🎟 ${t.nambari_tukio}</div>
-        <div class="event-actions">
-          <button class="btn btn-sm btn-gold" onclick="editTukio('${t.id}')">✏ Hariri</button>
-          <button class="btn btn-sm btn-primary" onclick="oneshaTukioKadi('${t.id}')">💌 Kadi</button>
-          <button class="btn btn-sm btn-red" onclick="futaTukio('${t.id}')">🗑</button>
+function renderMatukio(){
+  if(!AM.length){$('matukio-list').innerHTML='<p style="color:var(--mt);text-align:center;padding:20px;">Hakuna matukio bado.</p>';return;}
+  $('matukio-list').innerHTML=AM.map(t=>{
+    const wc=AW.filter(w=>w.tukio_id===t.id).length;
+    const as=AA.filter(a=>a.tukio_id===t.id).reduce((s,a)=>s+a.kiasi,0);
+    return`<div class="ev-card">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div class="ev-icon">${ainaIcon(t.aina)}</div>
+        <div style="flex:1;">
+          <div class="ev-name">${t.jina_tukio}</div>
+          <div class="ev-detail">📅 ${t.tarehe} · ⏰ ${t.saa} · 📍 ${t.ukumbi}</div>
+          <div class="ev-detail" style="margin-top:4px;">👥 ${wc} wageni · 💰 ${pesa(as)} ahadi · 🎟 ${t.nambari_tukio}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+            <button class="btn btn-g btn-sm" onclick="aTab('kd');$('kd-tukio-sel').value='${t.id}';loadKadiWageni()">💌 Kadi</button>
+            <button class="btn btn-p btn-sm" onclick="aTab('wa');$('wa-tukio-sel').value='${t.id}';loadWageni()">👥 Wageni</button>
+            <button class="btn btn-r btn-sm" onclick="futaTukio('${t.id}')">🗑</button>
+          </div>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-function jaziTukioSelects(){
-  ['wageni-tukio-sel','kadi-tukio-sel','ahadi-tukio-sel'].forEach(id=>{
-    const sel=$(id);if(!sel)return;
-    sel.innerHTML='<option value="">Chagua tukio...</option>';
-    allMatukio.forEach(t=>{
-      const o=document.createElement('option');o.value=t.id;o.textContent=`${ainaIcon(t.aina)} ${t.jina_tukio} (${t.nambari_tukio})`;sel.appendChild(o);
-    });
+function jaziSelects(){
+  ['wa-tukio-sel','kd-tukio-sel','ah-tukio-sel'].forEach(id=>{
+    const s=$(id);if(!s)return;
+    const prev=s.value;
+    s.innerHTML='<option value="">— Chagua tukio —</option>';
+    AM.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=`${ainaIcon(t.aina)} ${t.jina_tukio}`;s.appendChild(o);});
+    if(prev)s.value=prev;
   });
 }
 
-// ═══ WAGENI ═══
+// ═══ ONGEZA MGENI ═══
 async function ongezaMgeni(){
-  const tid=$('wageni-tukio-sel').value;
-  const jina=$('mgeni-jina').value.trim();
-  const simu=$('mgeni-simu').value.trim();
-  if(!tid){setAlert('mgeni-alert','Chagua tukio kwanza','error');return;}
-  if(!jina){setAlert('mgeni-alert','Weka jina la mgeni','error');return;}
-  const tukio=allMatukio.find(t=>t.id===tid);
-  const prefix=tukio?tukio.jina_tukio.substring(0,3).toUpperCase():'IMS';
-  try{
-    const result=await DB.post('wageni',{
-      tukio_id:tid,jina_kamili:jina,namba_simu:simu,
-      nambari_kadi:nambariKadi(prefix),barcode:generateBarcode(),njia_kuongezwa:'admin'
-    });
-    if(Array.isArray(result)&&result[0]){
-      setAlert('mgeni-alert',`✅ ${jina} ameongezwa! Nambari ya Kadi: <strong>${result[0].nambari_kadi}</strong>`,'success');
-      $('mgeni-jina').value='';$('mgeni-simu').value='';
-      await loadAdminData();
-      loadWageniKwa();
-    }
-  }catch(e){setAlert('mgeni-alert','Hitilafu: '+e.message,'error');}
+  const tid=$('wa-tukio-sel').value,jina=$('mg-jina').value.trim(),simu=$('mg-simu').value.trim();
+  const aina=$('mg-aina').value,malipo=$('mg-malipo').value;
+  if(!tid){setAl('al-mgeni','Chagua tukio kwanza','e');return;}
+  if(!jina){setAl('al-mgeni','Weka jina la mgeni','e');return;}
+  const tukio=AM.find(t=>t.id===tid);
+  const nambari=nambariKadi(aina,tukio?tukio.jina_tukio:'EVT');
+  const kadiUrl=SITE+'?kadi='+nambari;
+  const waliopo=AW.filter(w=>w.tukio_id===tid&&w.tarehe_malipo).sort((a,b)=>new Date(a.tarehe_malipo)-new Date(b.tarehe_malipo));
+  const meza=waliopo.length+1;
+  const jumla_meza=tukio?tukio.jumla_meza:10;
+  const mezaFinal=Math.min(meza,jumla_meza);
+  const r=await DB.post('wageni',{tukio_id:tid,nambari_kadi:nambari,jina_kamili:jina,namba_simu:simu,aina_kadi:aina,nambari_meza:mezaFinal,tarehe_malipo:malipo||null,barcode_data:kadiUrl,kadi_url:kadiUrl,ni_vip:aina==='VIP'});
+  if(Array.isArray(r)&&r[0]){
+    setAl('al-mgeni',`✅ ${jina} ameongezwa! Kadi: <strong>${nambari}</strong> · Meza: <strong>${mezaFinal}</strong>`,'s');
+    $('mg-jina').value='';$('mg-simu').value='';
+    await loadAll();loadWageni();
+  }else{setAl('al-mgeni','Hitilafu. Jaribu tena.','e');}
 }
 
-function loadWageniKwa(){
-  const tid=$('wageni-tukio-sel').value;
-  const list=tid?allWageni.filter(w=>w.tukio_id===tid):allWageni;
-  if(!list.length){$('wageni-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Hakuna wageni bado</td></tr>';return;}
+function loadWageni(){
+  const tid=$('wa-tukio-sel').value;
+  const list=tid?AW.filter(w=>w.tukio_id===tid):AW;
+  if(!list.length){$('wageni-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--mt);padding:20px;">Hakuna wageni</td></tr>';return;}
   $('wageni-tbody').innerHTML=list.map(w=>`
     <tr>
-      <td><strong>${w.jina_kamili}</strong><br><span style="font-size:11px;color:var(--muted);">${w.namba_simu||'—'}</span></td>
-      <td><span style="font-family:monospace;font-size:12px;">${w.nambari_kadi}</span></td>
-      <td><span class="badge ${w.rsvp==='nakuja'?'badge-green':w.rsvp==='sitakuja'?'badge-red':'badge-gray'}">${w.rsvp==='nakuja'?'✅ Nakuja':w.rsvp==='sitakuja'?'❌ Sitakuja':'⏳ Bado'}</span></td>
-      <td><span class="badge ${w.ameingia?'badge-green':'badge-gray'}">${w.ameingia?'✅ Ameingia':'—'}</span></td>
+      <td><strong>${w.jina_kamili}</strong><br><span style="font-size:11px;color:var(--mt);">${w.namba_simu||'—'}</span></td>
+      <td><span style="font-family:monospace;font-size:12px;font-weight:700;">${w.nambari_kadi}</span></td>
+      <td><span class="badge ${w.aina_kadi==='VIP'?'bg-vip':w.aina_kadi==='Double'?'bg-bl':'bg-gray'}">${w.aina_kadi==='VIP'?'⭐ VIP':w.aina_kadi==='Double'?'👫 Double':'🧑 Single'}</span></td>
+      <td><strong style="font-size:16px;">${w.nambari_meza||'—'}</strong></td>
+      <td><span class="badge ${w.rsvp==='nakuja'?'bg-gr':w.rsvp==='sitakuja'?'bg-rd':'bg-gray'}">${w.rsvp==='nakuja'?'✅':w.rsvp==='sitakuja'?'❌':'⏳'}</span></td>
+      <td><span class="badge ${w.ameingia?'bg-gr':'bg-gray'}">${w.ameingia?'✓':'—'}</span></td>
       <td>
-        <button class="btn btn-sm btn-gold" onclick="oneshaMgeniKadi('${w.id}')">💌 Kadi</button>
-        <button class="btn btn-sm btn-red" onclick="futaMgeni('${w.id}')" style="margin-left:4px;">🗑</button>
+        <button class="btn btn-g btn-sm" onclick="oneshaMgeniKadi('${w.id}')">💌</button>
+        <button class="btn btn-r btn-sm" onclick="futaMgeni('${w.id}')" style="margin-left:4px;">🗑</button>
       </td>
     </tr>`).join('');
 }
@@ -567,335 +609,339 @@ function loadWageniKwa(){
 async function futaMgeni(id){
   if(!confirm('Futa mgeni huyu?'))return;
   await DB.del('wageni',`id=eq.${id}`);
-  allWageni=allWageni.filter(w=>w.id!==id);
-  loadWageniKwa();toast('Mgeni amefutwa');
-}
-
-// ═══ E-CARD DESIGN ═══
-function buildEcard(tukio, mgeni, containerId){
-  const rangi=tukio.rangi_kadi||'#8B4513';
-  const rangi2=tukio.rangi_pili||'#C9A84C';
-  const container=$(containerId);
-  if(!container)return;
-  const barcode_id='bc_'+Math.random().toString(36).substr(2,6);
-  container.innerHTML=`
-  <div class="ecard" id="ecard_main" style="background:linear-gradient(160deg,#FFF9F0 0%,#FFF5E6 100%);">
-    <div style="background:${rangi};padding:6px 0;text-align:center;">
-      <p style="color:${rangi2};font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">✦ ${tukio.aina} ✦</p>
-    </div>
-    <div class="ecard-header" style="background:linear-gradient(160deg,#FFF9F0,#FFF5E6);">
-      <div class="ecard-roses"></div>
-      <div class="ecard-border" style="border-color:${rangi};"></div>
-      <p class="ecard-familia" style="color:${rangi};">${tukio.jina_mwenyeji}</p>
-      <p style="font-size:12px;color:#666;margin-bottom:8px;">wanakualika kwa heshima</p>
-      <p class="ecard-mgeni" style="color:${rangi};">${mgeni.jina_kamili}</p>
-      <p style="font-size:12px;color:#666;margin-bottom:10px;">kushiriki katika sherehe ya</p>
-      <p class="ecard-jina-mkuu" style="color:${rangi};">${tukio.jina_tukio}</p>
-    </div>
-    <div style="height:1px;background:${rangi};margin:0 24px;opacity:0.3;"></div>
-    <div class="ecard-details">
-      <div style="height:12px;"></div>
-      <div class="ecard-detail-row">
-        <span class="ecard-detail-icon">📅</span>
-        <div><div class="ecard-detail-label" style="color:${rangi};">Tarehe</div><div class="ecard-detail-value">${formatTarehe(tukio.tarehe)}, ${tukio.saa}</div></div>
-      </div>
-      <div class="ecard-detail-row">
-        <span class="ecard-detail-icon">📍</span>
-        <div><div class="ecard-detail-label" style="color:${rangi};">Ukumbi wa Sherehe</div><div class="ecard-detail-value">${tukio.ukumbi}</div></div>
-      </div>
-      ${tukio.dress_code?`<div class="ecard-detail-row">
-        <span class="ecard-detail-icon">👗</span>
-        <div><div class="ecard-detail-label" style="color:${rangi};">Dress Code</div><div class="ecard-detail-value">${tukio.dress_code}</div></div>
-      </div>`:''}
-      ${tukio.location_link?`<div class="ecard-detail-row">
-        <span class="ecard-detail-icon">🗺</span>
-        <div><div class="ecard-detail-label" style="color:${rangi};">Location</div><div class="ecard-detail-value"><a href="${tukio.location_link}" target="_blank" style="color:${rangi2};">Bonyeza hapa</a></div></div>
-      </div>`:''}
-      ${tukio.mawasiliano?`<div class="ecard-detail-row">
-        <span class="ecard-detail-icon">📞</span>
-        <div><div class="ecard-detail-label" style="color:${rangi};">Mawasiliano</div><div class="ecard-detail-value">${tukio.mawasiliano}</div></div>
-      </div>`:''}
-    </div>
-    <div style="height:1px;background:${rangi};margin:0 24px;opacity:0.2;"></div>
-    <div class="ecard-footer">
-      <div>
-        <div style="font-size:10px;color:#999;margin-bottom:4px;">Card No.</div>
-        <div style="font-family:monospace;font-size:14px;font-weight:700;color:${rangi};">${mgeni.nambari_kadi}</div>
-        <svg id="${barcode_id}" style="margin-top:6px;max-width:140px;"></svg>
-      </div>
-      <div style="text-align:center;">
-        <canvas id="qr_${mgeni.id}" width="70" height="70"></canvas>
-        <div style="font-size:9px;color:#999;margin-top:3px;">Scan QR</div>
-      </div>
-    </div>
-    ${tukio.ujumbe_ziada?`<div style="background:${rangi};padding:8px 16px;text-align:center;"><p style="color:${rangi2};font-size:11px;font-style:italic;">${tukio.ujumbe_ziada}</p></div>`:''}
-    <div style="background:#F9F4EC;padding:12px 16px;display:flex;gap:8px;">
-      <button class="rsvp-btn rsvp-nakuja" onclick="rsvpJibu('${mgeni.id}','nakuja')">✅ Asante, nitafika</button>
-      <button class="rsvp-btn rsvp-sitakuja" onclick="rsvpJibu('${mgeni.id}','sitakuja')">🙏 Sitoweza Kufika</button>
-    </div>
-    <div class="ecard-note" style="color:#999;background:#F9F4EC;">KARIBU SANA! 🎉</div>
-  </div>`;
-  setTimeout(()=>{
-    try{
-      JsBarcode('#'+barcode_id,mgeni.nambari_kadi,{format:'CODE128',width:1.5,height:30,displayValue:false,background:'transparent'});
-    }catch(e){}
-    try{
-      QRCode.toCanvas($('qr_'+mgeni.id),mgeni.nambari_kadi,{width:70,margin:1},()=>{});
-    }catch(e){}
-  },200);
-}
-
-function formatTarehe(d){
-  if(!d)return'—';
-  const dt=new Date(d+'T00:00:00');
-  return dt.toLocaleDateString('sw-TZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-}
-
-function loadKadiWageni(){
-  const tid=$('kadi-tukio-sel').value;
-  const sel=$('kadi-mgeni-sel');
-  sel.innerHTML='<option value="">Chagua mgeni...</option>';
-  const list=tid?allWageni.filter(w=>w.tukio_id===tid):[];
-  list.forEach(w=>{
-    const o=document.createElement('option');o.value=w.id;o.textContent=`${w.jina_kamili} (${w.nambari_kadi})`;sel.appendChild(o);
-  });
-}
-
-function oneshakadi(){
-  const tid=$('kadi-tukio-sel').value;
-  const wid=$('kadi-mgeni-sel').value;
-  if(!tid||!wid){toast('Chagua tukio na mgeni kwanza');return;}
-  const tukio=allMatukio.find(t=>t.id===tid);
-  const mgeni=allWageni.find(w=>w.id===wid);
-  if(!tukio||!mgeni)return;
-  $('kadi-preview').innerHTML='<div id="kadi-container" style="padding:16px;"></div>';
-  buildEcard(tukio,mgeni,'kadi-container');
-  const waMsg=generateWaMessage(tukio,mgeni);
-  $('kadi-wa-wrap').style.display='block';
-  $('kadi-wa-content').innerHTML=`
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Ujumbe utakaotumwa kwa WhatsApp:</p>
-    <div style="background:#E8F5E9;border-radius:8px;padding:12px;font-size:12px;white-space:pre-line;line-height:1.7;margin-bottom:12px;">${waMsg}</div>
-    <a href="https://wa.me/${mgeni.namba_simu?mgeni.namba_simu.replace(/^0/,'255'):''}?text=${encodeURIComponent(waMsg)}" target="_blank" class="wa-btn" style="text-decoration:none;">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      📲 Tuma kwa WhatsApp — ${mgeni.jina_kamili}
-    </a>`;
-}
-
-function chapishakadi(){
-  window.print();
-}
-
-function generateWaMessage(tukio,mgeni){
-  return `Habari!, *${mgeni.jina_kamili}*\nPokea kadi yako ya Mualiko\nKutoka kwa ${tukio.jina_mwenyeji}\n\n📅 Tarehe: *${formatTarehe(tukio.tarehe)}, ${tukio.saa}*\n🏛 Ukumbi: *${tukio.ukumbi}*\n🎟 Card No: *${mgeni.nambari_kadi}*${tukio.location_link?'\n\n📍 Location: '+tukio.location_link:''}${tukio.mawasiliano?'\n\n📞 Mawasiliano: '+tukio.mawasiliano:''}${tukio.ujumbe_ziada?'\n\n📌 '+tukio.ujumbe_ziada:''}\n\nKARIBU SANA! 🎉🥂`;
-}
-
-function oneshaMgeniKadi(mgeniId){
-  const mgeni=allWageni.find(w=>w.id===mgeniId);
-  const tukio=mgeni?allMatukio.find(t=>t.id===mgeni.tukio_id):null;
-  if(!mgeni||!tukio)return;
-  openModal(mgeni.jina_kamili+' — Kadi','<div id="modal-kadi-container"></div>');
-  setTimeout(()=>buildEcard(tukio,mgeni,'modal-kadi-container'),100);
-}
-
-function oneshaTukioKadi(tukioId){
-  const tukio=allMatukio.find(t=>t.id===tukioId);
-  if(!tukio)return;
-  showAdminTab('kadi');
-  $('kadi-tukio-sel').value=tukioId;
-  loadKadiWageni();
-}
-
-// ═══ RSVP ═══
-async function rsvpJibu(mgeniId,jibu){
-  await DB.patch('wageni',`id=eq.${mgeniId}`,{rsvp:jibu});
-  const mgeni=allWageni.find(w=>w.id===mgeniId);
-  if(mgeni)mgeni.rsvp=jibu;
-  toast(jibu==='nakuja'?'✅ Asante! Jibu lako limehifadhiwa.':'🙏 Asante kwa kutuarifu.');
-  loadWageniKwa();
-}
-
-// ═══ AHADI ═══
-async function ongezaAhadi(){
-  const tid=$('ahadi-tukio-sel').value;
-  const jina=$('ahadi-jina').value.trim();
-  const simu=$('ahadi-simu').value.trim();
-  const kiasi=parseInt($('ahadi-kiasi').value);
-  const hali=$('ahadi-hali').value;
-  if(!tid){setAlert('ahadi-add-alert','Chagua tukio kwanza','error');return;}
-  if(!jina||!kiasi){setAlert('ahadi-add-alert','Jaza jina na kiasi','error');return;}
-  try{
-    await DB.post('ahadi',{tukio_id:tid,jina_mtoaji:jina,namba_simu:simu,kiasi,status:hali,tarehe_ahadi:leoISO(),mgeni_id:null});
-    setAlert('ahadi-add-alert',`✅ Ahadi ya ${pesa(kiasi)} imehifadhiwa!`,'success');
-    $('ahadi-jina').value='';$('ahadi-simu').value='';$('ahadi-kiasi').value='';
-    await loadAdminData();loadAhadiKwa();
-  }catch(e){setAlert('ahadi-add-alert','Hitilafu: '+e.message,'error');}
-}
-
-function loadAhadiKwa(){
-  const tid=$('ahadi-tukio-sel').value;
-  const list=tid?allAhadi.filter(a=>a.tukio_id===tid):allAhadi;
-  const jumla=list.reduce((s,a)=>s+a.kiasi,0);
-  const lipa=list.filter(a=>a.status==='imelipwa').reduce((s,a)=>s+a.kiasi,0);
-  const ahadi=list.filter(a=>a.status==='ahadi').reduce((s,a)=>s+a.kiasi,0);
-  const statsEl=$('ahadi-stats');
-  if(tid){
-    statsEl.style.display='grid';
-    statsEl.innerHTML=`
-      <div class="stat-card"><div class="stat-num">${pesa(jumla)}</div><div class="stat-lbl">Jumla Ahadi</div></div>
-      <div class="stat-card"><div class="stat-num" style="color:var(--green)">${pesa(lipa)}</div><div class="stat-lbl">Zilizolipwa</div></div>
-      <div class="stat-card"><div class="stat-num" style="color:var(--amber)">${pesa(ahadi)}</div><div class="stat-lbl">Bado Hazijalipwa</div></div>
-      <div class="stat-card"><div class="stat-num">${list.length}</div><div class="stat-lbl">Idadi ya Watolewaji</div></div>`;
-  }else{statsEl.style.display='none';}
-  if(!list.length){$('ahadi-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Hakuna ahadi bado</td></tr>';return;}
-  $('ahadi-tbody').innerHTML=list.map(a=>`
-    <tr>
-      <td><strong>${a.jina_mtoaji}</strong></td>
-      <td>${a.namba_simu||'—'}</td>
-      <td><strong>${pesa(a.kiasi)}</strong></td>
-      <td><span class="badge ${a.status==='imelipwa'?'badge-green':'badge-gold'}">${a.status==='imelipwa'?'✅ Imelipwa':'⏳ Ahadi'}</span></td>
-      <td>${a.tarehe_ahadi}</td>
-      <td>
-        ${a.status==='ahadi'?`<button class="btn btn-sm btn-green" onclick="thibitishaLipa('${a.id}')">✅ Lipa</button>`:''}
-        <button class="btn btn-sm btn-red" onclick="futaAhadi('${a.id}')" style="margin-left:4px;">🗑</button>
-      </td>
-    </tr>`).join('');
-}
-
-async function thibitishaLipa(id){
-  await DB.patch('ahadi',`id=eq.${id}`,{status:'imelipwa',tarehe_lipa:leoISO()});
-  const a=allAhadi.find(x=>x.id===id);if(a)a.status='imelipwa';
-  toast('✅ Malipo yamethibitishwa!');loadAhadiKwa();renderStats();
-}
-
-async function futaAhadi(id){
-  if(!confirm('Futa ahadi hii?'))return;
-  await DB.del('ahadi',`id=eq.${id}`);
-  allAhadi=allAhadi.filter(a=>a.id!==id);
-  loadAhadiKwa();renderStats();toast('Ahadi imefutwa');
-}
-
-// ═══ SCAN ═══
-async function scanKadi(){
-  const input=$('scan-input').value.trim().toUpperCase();
-  if(!input){toast('Ingiza nambari ya kadi');return;}
-  const mgeni=allWageni.find(w=>w.nambari_kadi===input||w.barcode===input);
-  if(!mgeni){$('scan-result').innerHTML='<div class="alert alert-error">❌ Kadi hii haikupatikana! Hakikisha nambari ni sahihi.</div>';return;}
-  const tukio=allMatukio.find(t=>t.id===mgeni.tukio_id)||{};
-  if(mgeni.ameingia){
-    $('scan-result').innerHTML=`<div class="alert alert-warning">⚠ Mgeni huyu tayari ameingia! (${new Date(mgeni.tarehe_kuingia).toLocaleTimeString()})</div>`;return;
-  }
-  await DB.patch('wageni',`id=eq.${mgeni.id}`,{ameingia:true,tarehe_kuingia:new Date().toISOString()});
-  mgeni.ameingia=true;mgeni.tarehe_kuingia=new Date().toISOString();
-  $('scan-result').innerHTML=`<div class="scan-result">
-    <div style="font-size:32px;text-align:center;margin-bottom:10px;">✅</div>
-    <p style="font-size:18px;font-weight:700;text-align:center;color:var(--green);">${mgeni.jina_kamili}</p>
-    <p style="text-align:center;color:var(--muted);font-size:13px;">${tukio.jina_tukio||'—'} · ${mgeni.nambari_kadi}</p>
-    <div style="background:var(--green-light);border-radius:8px;padding:10px;text-align:center;margin-top:10px;">
-      <p style="color:var(--green);font-weight:600;">KARIBU! Mgeni amethitishwa ✓</p>
-    </div>
-  </div>`;
-  $('scan-input').value='';
-  loadWalioingia();toast('✅ '+mgeni.jina_kamili+' ameingia!');
-}
-
-function loadWalioingia(){
-  const walioingia=allWageni.filter(w=>w.ameingia).sort((a,b)=>new Date(b.tarehe_kuingia)-new Date(a.tarehe_kuingia));
-  if(!walioingia.length){$('walioingia-tbody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px;">Hakuna wageni walioingia bado</td></tr>';return;}
-  $('walioingia-tbody').innerHTML=walioingia.map(w=>{
-    const tukio=allMatukio.find(t=>t.id===w.tukio_id)||{};
-    return`<tr><td><strong>${w.jina_kamili}</strong></td><td><span style="font-family:monospace;">${w.nambari_kadi}</span></td><td>${tukio.jina_tukio||'—'}</td><td>${w.tarehe_kuingia?new Date(w.tarehe_kuingia).toLocaleTimeString():'—'}</td></tr>`;
-  }).join('');
-}
-
-// ═══ TAFUTA KADI (PUBLIC) ═══
-async function tafutaKadi(){
-  const input=$('search-input').value.trim().toUpperCase();
-  if(!input){setAlert('search-alert','Ingiza nambari ya kadi au tukio','error');return;}
-  setAlert('search-alert','Inatafuta...','info');
-  try{
-    let mgeni=null,tukio=null;
-    const wageniResult=await DB.get('wageni',`nambari_kadi=eq.${input}`);
-    if(Array.isArray(wageniResult)&&wageniResult[0]){
-      mgeni=wageniResult[0];
-      const tukioResult=await DB.get('matukio',`id=eq.${mgeni.tukio_id}`);
-      if(Array.isArray(tukioResult)&&tukioResult[0])tukio=tukioResult[0];
-    } else {
-      const tukioResult=await DB.get('matukio',`nambari_tukio=eq.${input}`);
-      if(Array.isArray(tukioResult)&&tukioResult[0]){tukio=tukioResult[0];}
-    }
-    if(!mgeni&&!tukio){setAlert('search-alert','Haikupatikana. Angalia nambari na ujaribu tena.','error');$('kadi-display').innerHTML='';return;}
-    setAlert('search-alert','','info');
-    if(mgeni&&tukio){
-      $('kadi-display').innerHTML='<div id="public-kadi-container"></div>';
-      setTimeout(()=>{
-        allWageni=[mgeni];allMatukio=[tukio];
-        buildEcard(tukio,mgeni,'public-kadi-container');
-      },100);
-    } else if(tukio){
-      $('kadi-display').innerHTML=`<div class="card">
-        <div class="card-title">${ainaIcon(tukio.aina)} ${tukio.jina_tukio}</div>
-        <p style="font-size:13px;margin-bottom:8px;">📅 ${formatTarehe(tukio.tarehe)}, ${tukio.saa}</p>
-        <p style="font-size:13px;margin-bottom:8px;">📍 ${tukio.ukumbi}</p>
-        <p style="font-size:13px;color:var(--muted);">Tukio hili lipo! Unaweza pia kuweka ahadi yako.</p>
-        <button class="btn btn-gold btn-block" onclick="showScreen('screen-pledge-public')" style="margin-top:12px;">💝 Weka Ahadi</button>
-      </div>`;
-    }
-  }catch(e){setAlert('search-alert','Hitilafu: '+e.message,'error');}
-}
-
-// ═══ PUBLIC PLEDGE ═══
-let pledgeTukioId=null;
-async function tafutaTukioPledge(){
-  const input=$('pledge-tukio-search').value.trim().toUpperCase();
-  if(!input){toast('Ingiza nambari ya tukio');return;}
-  try{
-    const r=await DB.get('matukio',`nambari_tukio=eq.${input}`);
-    if(!Array.isArray(r)||!r[0]){$('pledge-tukio-info').innerHTML='<div class="alert alert-error">Tukio hili halipatikani</div>';$('pledge-form-wrap').style.display='none';return;}
-    const t=r[0];pledgeTukioId=t.id;
-    $('pledge-tukio-info').innerHTML=`<div class="pledge-hero">
-      <div class="pledge-event-name">${t.jina_tukio}</div>
-      <div class="pledge-detail">${ainaIcon(t.aina)} ${t.aina} · 📅 ${formatTarehe(t.tarehe)} · 📍 ${t.ukumbi}</div>
-    </div>`;
-    $('pledge-form-wrap').style.display='block';
-  }catch(e){$('pledge-tukio-info').innerHTML='<div class="alert alert-error">Hitilafu: '+e.message+'</div>';}
-}
-
-async function tutaAhadi(){
-  if(!pledgeTukioId){toast('Tafuta tukio kwanza');return;}
-  const jina=$('pledge-jina').value.trim();
-  const simu=$('pledge-simu').value.trim();
-  const kiasi=parseInt($('pledge-kiasi').value);
-  const ujumbe=$('pledge-ujumbe').value.trim();
-  if(!jina||!simu||!kiasi){setAlert('pledge-alert','Jaza sehemu zote zinazohitajika','error');return;}
-  try{
-    await DB.post('ahadi',{tukio_id:pledgeTukioId,jina_mtoaji:jina,namba_simu:simu,kiasi,maelezo:ujumbe,status:'ahadi',tarehe_ahadi:leoISO(),mgeni_id:null});
-    setAlert('pledge-alert',`✅ Ahadi yako ya ${pesa(kiasi)} imehifadhiwa! Asante sana kwa upendo wako. 💝`,'success');
-    $('pledge-jina').value='';$('pledge-simu').value='';$('pledge-kiasi').value='';$('pledge-ujumbe').value='';
-  }catch(e){setAlert('pledge-alert','Hitilafu: '+e.message,'error');}
+  AW=AW.filter(w=>w.id!==id);
+  loadWageni();renderStats();toast('Mgeni amefutwa');
 }
 
 async function futaTukio(id){
   if(!confirm('Futa tukio hili na wageni wake wote?'))return;
   await DB.del('matukio',`id=eq.${id}`);
-  allMatukio=allMatukio.filter(t=>t.id!==id);
-  allWageni=allWageni.filter(w=>w.tukio_id!==id);
-  renderMatukioList();renderStats();jaziTukioSelects();toast('Tukio limefutwa');
+  AM=AM.filter(t=>t.id!==id);AW=AW.filter(w=>w.tukio_id!==id);
+  renderMatukio();renderStats();jaziSelects();toast('Tukio limefutwa');
 }
 
-// ═══ ADMIN TABS ═══
-function showAdminTab(tab){
-  ['matukio','wageni','kadi','ahadi','scan'].forEach(t=>{
-    const el=$('atab-'+t);if(el)el.style.display=t===tab?'block':'none';
-    const btn=$('atab-'+t+'-btn');if(btn)btn.classList.toggle('active',t===tab);
+// ═══ BUILD E-CARD ═══
+function buildEcard(tukio, mgeni, containerId){
+  const R=tukio.rangi_kuu||'#8B1A1A';
+  const G=tukio.rangi_dhahabu||'#C9A84C';
+  const isVip=mgeni.aina_kadi==='VIP'||mgeni.ni_vip;
+  const kadiUrl=mgeni.kadi_url||mgeni.barcode_data||SITE+'?kadi='+mgeni.nambari_kadi;
+  const qid='qr_'+mgeni.id.replace(/-/g,'').substr(0,8);
+  const container=$(containerId);if(!container)return;
+
+  const ainaBadge=mgeni.aina_kadi==='VIP'?`<span class="ec-type-chip" style="border-color:${G};color:${G};background:rgba(201,168,76,0.1);">⭐ VIP GUEST</span>`:
+    mgeni.aina_kadi==='Double'?`<span class="ec-type-chip" style="border-color:${R};color:${R};">👫 DOUBLE</span>`:
+    `<span class="ec-type-chip" style="border-color:${R};color:${R};">🧑 SINGLE</span>`;
+
+  container.innerHTML=`
+  <div class="ecard-outer">
+  <div class="ecard" style="background:linear-gradient(170deg,#FFFBF5 0%,#FFF8EE 60%,#FFF5E6 100%);">
+    <div class="ec-topbar" style="background:linear-gradient(90deg,${R},${G},${R});"></div>
+    <div class="ec-floral"></div>
+    <div class="ec-header">
+      <div class="ec-border-frame" style="border-color:${R};"></div>
+      <div style="margin-bottom:12px;">${ainaBadge}</div>
+      <p class="ec-familia" style="color:${R};">Familia ya <strong>${tukio.jina_mwenyeji}</strong> wa ${tukio.mahali_mwenyeji}</p>
+      <p style="font-size:12px;color:#777;margin-bottom:8px;">${tukio.aina==='Harusi'?'wanafuraha kukualika/kuwaalika':'wanakualika kwa heshima'}</p>
+      <p class="ec-guest-name" style="color:${R};">${mgeni.jina_kamili}</p>
+      <p class="ec-event-phrase" style="color:#666;">kushiriki katika ${tukio.aina==='Harusi'?'sherehe ya harusi':'sherehe ya '+tukio.aina.toLowerCase()} ${tukio.aina==='Harusi'?'yao':'yao'}</p>
+      <p class="ec-event-name" style="color:${R};">${tukio.jina_tukio}</p>
+    </div>
+    <div class="ec-divider" style="background:${R};margin:0 20px 16px;height:1px;opacity:0.25;"></div>
+    <div class="ec-details">
+      <div class="ec-detail-item">
+        <span class="ec-det-icon">📅</span>
+        <div><div class="ec-det-lbl" style="color:${R};">Tarehe</div><div class="ec-det-val">${formatTarehe(tukio.tarehe)}</div><div style="font-size:12px;color:#666;">⏰ ${tukio.saa}</div></div>
+      </div>
+      <div class="ec-detail-item">
+        <span class="ec-det-icon">🏛</span>
+        <div><div class="ec-det-lbl" style="color:${R};">Ukumbi wa Sherehe</div><div class="ec-det-val">${tukio.ukumbi}</div></div>
+      </div>
+      ${tukio.dress_code?`<div class="ec-detail-item"><span class="ec-det-icon">👗</span><div><div class="ec-det-lbl" style="color:${R};">Dress Code</div><div class="ec-det-val">${tukio.dress_code}</div></div></div>`:''}
+      ${tukio.location_link?`<div class="ec-detail-item"><span class="ec-det-icon">📍</span><div><div class="ec-det-lbl" style="color:${R};">Ramani ya Mahali</div><div class="ec-det-link"><a href="${tukio.location_link}" target="_blank" style="color:${G};font-weight:600;">Bonyeza hapa kwa ramani</a></div></div></div>`:''}
+    </div>
+    ${(tukio.mwenyekiti_jina||tukio.katibu_jina||tukio.hazina_jina)?`
+    <div class="ec-kamati" style="background:rgba(${hexToRgb(R)},0.06);border:1px solid rgba(${hexToRgb(R)},0.15);">
+      <div class="ec-kamati-title" style="color:${R};">✦ Kamati ya Tukio ✦</div>
+      <div class="ec-kamati-grid">
+        ${tukio.mwenyekiti_jina?`<div class="ec-kamati-item"><div class="ec-kamati-role" style="color:${R};">Mwenyekiti</div><div class="ec-kamati-jina">${tukio.mwenyekiti_jina}</div>${tukio.mwenyekiti_simu?`<div class="ec-kamati-simu">${tukio.mwenyekiti_simu}</div>`:''}</div>`:'<div></div>'}
+        ${tukio.katibu_jina?`<div class="ec-kamati-item"><div class="ec-kamati-role" style="color:${R};">Katibu</div><div class="ec-kamati-jina">${tukio.katibu_jina}</div>${tukio.katibu_simu?`<div class="ec-kamati-simu">${tukio.katibu_simu}</div>`:''}</div>`:'<div></div>'}
+        ${tukio.hazina_jina?`<div class="ec-kamati-item"><div class="ec-kamati-role" style="color:${R};">Mweka Hazina</div><div class="ec-kamati-jina">${tukio.hazina_jina}</div>${tukio.hazina_simu?`<div class="ec-kamati-simu">${tukio.hazina_simu}</div>`:''}</div>`:'<div></div>'}
+      </div>
+    </div>`:''}
+    ${tukio.ujumbe_ziada?`<div style="background:${R};padding:8px 16px;text-align:center;"><p style="color:${G};font-size:11px;font-style:italic;">📌 ${tukio.ujumbe_ziada}</p></div>`:''}
+    <div class="ec-footer" style="background:#FAFAF5;">
+      <div>
+        <div class="ec-card-num-lbl">Card No.</div>
+        <div class="ec-card-num" style="color:${R};">${mgeni.nambari_kadi}</div>
+        <div class="ec-table-num">
+          <div class="ec-table-lbl" style="color:${R};">Nambari ya Meza</div>
+          <div class="ec-table-val" style="color:${R};">${mgeni.nambari_meza||'—'}</div>
+        </div>
+      </div>
+      <div class="ec-qr-wrap">
+        <canvas id="${qid}" width="80" height="80"></canvas>
+        <div class="ec-qr-lbl" style="color:#999;">Scan QR Code</div>
+        <div style="font-size:9px;color:#aaa;margin-top:2px;">Fungua kadi moja kwa moja</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(90deg,${R},${G},${R});height:4px;"></div>
+    <div class="ec-rsvp" style="background:#F9F4EC;">
+      <button class="ec-rsvp-btn" style="background:${R};color:white;" onclick="rsvp('${mgeni.id}','nakuja')">✅ Asante, Nitafika</button>
+      <button class="ec-rsvp-btn" style="background:#F0EDE8;color:#666;border:1px solid #DDD;" onclick="rsvp('${mgeni.id}','sitakuja')">🙏 Sitoweza Kufika</button>
+    </div>
+    <div class="ec-brand" style="background:#F9F4EC;">E-Card Tanzania · Mfumo wa Mialiko ya Kidijitali</div>
+  </div>
+  </div>`;
+
+  setTimeout(()=>{
+    try{
+      QRCode.toCanvas($(qid),kadiUrl,{width:80,margin:1,color:{dark:R,light:'#FFFFFF'}},()=>{});
+    }catch(e){console.log('QR err',e);}
+  },300);
+}
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return`${r},${g},${b}`;
+}
+
+function loadKadiWageni(){
+  const tid=$('kd-tukio-sel').value;
+  const s=$('kd-mgeni-sel');
+  s.innerHTML='<option value="">— Chagua mgeni —</option>';
+  AW.filter(w=>w.tukio_id===tid).forEach(w=>{
+    const o=document.createElement('option');o.value=w.id;
+    o.textContent=`${w.jina_kamili} (${w.nambari_kadi}) — ${w.aina_kadi}`;
+    s.appendChild(o);
   });
 }
 
-// Fix button name issues
-window.oneshakadi=oneshakadi;
-window.chapishakadi=chapishakadi;
+function previewKadi(){
+  const tid=$('kd-tukio-sel').value,wid=$('kd-mgeni-sel').value;
+  if(!tid||!wid){toast('Chagua tukio na mgeni kwanza');return;}
+  const tukio=AM.find(t=>t.id===tid),mgeni=AW.find(w=>w.id===wid);
+  if(!tukio||!mgeni)return;
+  $('kadi-preview-wrap').innerHTML='<div id="kadi-build-container"></div>';
+  buildEcard(tukio,mgeni,'kadi-build-container');
+  showShareOptions(tukio,mgeni);
+}
+
+function showShareOptions(tukio,mgeni){
+  const kadiUrl=mgeni.kadi_url||SITE+'?kadi='+mgeni.nambari_kadi;
+  const msg=buildWaMsg(tukio,mgeni,kadiUrl);
+  const simu=mgeni.namba_simu?mgeni.namba_simu.replace(/^0/,'255'):'';
+  $('kadi-share-wrap').style.display='block';
+  $('kadi-share-content').innerHTML=`
+    <div class="al al-i" style="margin-bottom:12px;font-size:12px;">
+      🔗 Kiungo cha kadi: <a href="${kadiUrl}" target="_blank" style="color:var(--bl);font-weight:600;">${kadiUrl}</a>
+    </div>
+    <div style="background:#F0F8FF;border-radius:8px;padding:12px;font-size:12px;white-space:pre-line;line-height:1.8;color:#333;margin-bottom:12px;">${msg}</div>
+    <div class="share-wrap">
+      <a href="https://wa.me/${simu}?text=${encodeURIComponent(msg)}" target="_blank" class="wa-btn share-btn" style="text-decoration:none;background:#25D366;color:white;">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        📲 Tuma kwa WhatsApp — ${mgeni.jina_kamili}
+      </a>
+      <button class="share-btn" style="background:#F0EDE8;color:var(--p);border:1px solid var(--br);" onclick="copyLink('${kadiUrl}')">
+        🔗 Nakili Kiungo
+      </button>
+    </div>`;
+}
+
+function buildWaMsg(tukio,mgeni,url){
+  return `Habari!, *${mgeni.jina_kamili}*\nPokea kadi yako ya Mualiko 💌\n\nKutoka kwa *${tukio.jina_mwenyeji}* wa ${tukio.mahali_mwenyeji}\n\n📅 *${formatTarehe(tukio.tarehe)}, ${tukio.saa}*\n🏛 *${tukio.ukumbi}*${tukio.dress_code?'\n👗 Dress Code: *'+tukio.dress_code+'*':''}${tukio.location_link?'\n📍 Ramani: '+tukio.location_link:''}\n\n🎟 Card No: *${mgeni.nambari_kadi}*\n🪑 Meza Nambari: *${mgeni.nambari_meza||'—'}*\n🎫 Aina ya Kadi: *${mgeni.aina_kadi}*\n\n👁 *Angalia kadi yako hapa:*\n${url}\n\n_(Scan QR code kwenye kadi yako kufungua moja kwa moja)_\n\nKARIBU SANA! 🎉🥂`;
+}
+
+function copyLink(url){
+  navigator.clipboard.writeText(url).then(()=>toast('✅ Kiungo kimekopiwa!'));
+}
+
+function oneshaMgeniKadi(wid){
+  const mgeni=AW.find(w=>w.id===wid),tukio=mgeni?AM.find(t=>t.id===mgeni.tukio_id):null;
+  if(!mgeni||!tukio)return;
+  openMod(mgeni.jina_kamili+' — Kadi','<div id="mod-kadi-cont"></div>');
+  setTimeout(()=>buildEcard(tukio,mgeni,'mod-kadi-cont'),100);
+}
+
+// ═══ RSVP ═══
+async function rsvp(wid,jibu){
+  await DB.patch('wageni',`id=eq.${wid}`,{rsvp:jibu});
+  const w=AW.find(x=>x.id===wid);if(w)w.rsvp=jibu;
+  toast(jibu==='nakuja'?'✅ Asante! Tutakuona sherehe!':'🙏 Asante kwa kutuarifu.');
+  loadWageni();
+}
+
+// ═══ AHADI ═══
+async function ongezaAhadi(){
+  const tid=$('ah-tukio-sel').value,jina=$('ah-jina').value.trim(),kiasi=parseInt($('ah-kiasi').value),hali=$('ah-hali').value;
+  if(!tid||!jina||!kiasi){setAl('al-ahadi','Jaza sehemu zote','e');return;}
+  const r=await DB.post('ahadi',{tukio_id:tid,jina_mtoaji:jina,namba_simu:$('ah-simu').value.trim(),kiasi,status:hali,tarehe_ahadi:leo()});
+  if(Array.isArray(r)&&r[0]){
+    setAl('al-ahadi',`✅ Ahadi ya ${pesa(kiasi)} imehifadhiwa!`,'s');
+    $('ah-jina').value='';$('ah-simu').value='';$('ah-kiasi').value='';
+    await loadAll();loadAhadi();
+  }
+}
+
+function loadAhadi(){
+  const tid=$('ah-tukio-sel').value;
+  const list=tid?AA.filter(a=>a.tukio_id===tid):AA;
+  const el=$('ah-stats');
+  if(tid&&list.length){
+    el.style.display='grid';
+    const j=list.reduce((s,a)=>s+a.kiasi,0);
+    const lp=list.filter(a=>a.status==='imelipwa').reduce((s,a)=>s+a.kiasi,0);
+    el.innerHTML=`
+      <div class="sc"><div class="sn">${pesa(j)}</div><div class="sl">Jumla</div></div>
+      <div class="sc"><div class="sn" style="color:var(--gr)">${pesa(lp)}</div><div class="sl">Zilizolipwa</div></div>
+      <div class="sc"><div class="sn" style="color:var(--am)">${pesa(j-lp)}</div><div class="sl">Hazijalipiwa</div></div>
+      <div class="sc"><div class="sn">${list.length}</div><div class="sl">Watolewaji</div></div>`;
+  }else{el.style.display='none';}
+  if(!list.length){$('ahadi-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--mt);padding:20px;">Hakuna ahadi</td></tr>';return;}
+  $('ahadi-tbody').innerHTML=list.map(a=>`
+    <tr>
+      <td><strong>${a.jina_mtoaji}</strong></td><td>${a.namba_simu||'—'}</td>
+      <td><strong>${pesa(a.kiasi)}</strong></td>
+      <td><span class="badge ${a.status==='imelipwa'?'bg-gr':'bg-gold'}">${a.status==='imelipwa'?'✅ Imelipwa':'⏳ Ahadi'}</span></td>
+      <td>${a.tarehe_ahadi}</td>
+      <td>
+        ${a.status==='ahadi'?`<button class="btn btn-gr btn-sm" onclick="lipaAhadi('${a.id}')">✅ Lipa</button>`:''}
+        <button class="btn btn-r btn-sm" onclick="futaAhadi('${a.id}')" style="margin-left:4px;">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function lipaAhadi(id){
+  await DB.patch('ahadi',`id=eq.${id}`,{status:'imelipwa',tarehe_lipa:leo()});
+  const a=AA.find(x=>x.id===id);if(a)a.status='imelipwa';
+  toast('✅ Malipo yamethibitishwa!');loadAhadi();renderStats();
+}
+
+async function futaAhadi(id){
+  if(!confirm('Futa ahadi hii?'))return;
+  await DB.del('ahadi',`id=eq.${id}`);
+  AA=AA.filter(a=>a.id!==id);loadAhadi();renderStats();toast('Imefutwa');
+}
+
+// ═══ SCAN ═══
+async function scanKadi(){
+  const input=$('scan-in').value.trim().toUpperCase();
+  if(!input){toast('Ingiza nambari ya kadi');return;}
+  const mgeni=AW.find(w=>w.nambari_kadi===input);
+  if(!mgeni){$('scan-result').innerHTML='<div class="al al-e">❌ Kadi hii haikupatikana! Hakikisha nambari ni sahihi.</div>';return;}
+  const tukio=AM.find(t=>t.id===mgeni.tukio_id)||{};
+  if(mgeni.ameingia){$('scan-result').innerHTML=`<div class="al al-w">⚠ Mgeni huyu tayari ameingia mara moja! (${mgeni.tarehe_kuingia?new Date(mgeni.tarehe_kuingia).toLocaleTimeString():''})</div>`;return;}
+  await DB.patch('wageni',`id=eq.${mgeni.id}`,{ameingia:true,tarehe_kuingia:new Date().toISOString()});
+  mgeni.ameingia=true;mgeni.tarehe_kuingia=new Date().toISOString();
+  $('scan-result').innerHTML=`
+    <div style="background:var(--grl);border:1px solid #A5D6A7;border-radius:12px;padding:20px;text-align:center;">
+      <div style="font-size:40px;margin-bottom:8px;">✅</div>
+      <p style="font-size:20px;font-weight:700;color:var(--gr);">${mgeni.jina_kamili}</p>
+      <p style="color:#666;font-size:13px;margin-top:4px;">${tukio.jina_tukio||'—'}</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+        <span class="badge bg-gr">🎫 ${mgeni.aina_kadi}</span>
+        <span class="badge bg-bl">🪑 Meza ${mgeni.nambari_meza||'—'}</span>
+      </div>
+      <p style="color:var(--gr);font-weight:600;margin-top:12px;">KARIBU! Mgeni amethitishwa ✓</p>
+    </div>`;
+  $('scan-in').value='';
+  loadWalioingia();toast('✅ '+mgeni.jina_kamili+' ameingia!');
+}
+
+function loadWalioingia(){
+  const list=AW.filter(w=>w.ameingia).sort((a,b)=>new Date(b.tarehe_kuingia||0)-new Date(a.tarehe_kuingia||0));
+  if(!list.length){$('walioingia-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mt);padding:20px;">Hakuna bado</td></tr>';return;}
+  $('walioingia-tbody').innerHTML=list.map(w=>{
+    const t=AM.find(x=>x.id===w.tukio_id)||{};
+    return`<tr><td><strong>${w.jina_kamili}</strong></td><td style="font-family:monospace;">${w.nambari_kadi}</td><td>${w.aina_kadi}</td><td><strong>${w.nambari_meza||'—'}</strong></td><td>${w.tarehe_kuingia?new Date(w.tarehe_kuingia).toLocaleTimeString():'—'}</td></tr>`;
+  }).join('');
+}
+
+// ═══ PUBLIC — ANGALIA KADI ═══
+async function angaliaKadi(){
+  const input=$('search-in').value.trim().toUpperCase();
+  if(!input){setAl('al-search','Ingiza nambari ya kadi','e');return;}
+  setAl('al-search','Inatafuta...','i');
+  try{
+    const wr=await DB.get('wageni',`nambari_kadi=eq.${input}`);
+    if(!Array.isArray(wr)||!wr[0]){setAl('al-search','Kadi hii haikupatikana. Angalia nambari na ujaribu tena.','e');$('kadi-pub-display').innerHTML='';return;}
+    const mgeni=wr[0];
+    const tr=await DB.get('matukio',`id=eq.${mgeni.tukio_id}`);
+    if(!Array.isArray(tr)||!tr[0]){setAl('al-search','Tukio halipatikani.','e');return;}
+    const tukio=tr[0];
+    setAl('al-search','','i');
+    AM=[tukio];AW=[mgeni];
+    $('kadi-pub-display').innerHTML='<div id="pub-kadi-cont"></div>';
+    setTimeout(()=>buildEcard(tukio,mgeni,'pub-kadi-cont'),100);
+    const url=mgeni.kadi_url||SITE+'?kadi='+mgeni.nambari_kadi;
+    const msg=buildWaMsg(tukio,mgeni,url);
+    const simu=mgeni.namba_simu?mgeni.namba_simu.replace(/^0/,'255'):'';
+    setTimeout(()=>{
+      $('kadi-pub-display').innerHTML+=`
+      <div class="card" style="margin-top:14px;">
+        <div class="card-title">📲 Shiriki Kadi Yako</div>
+        <div class="share-wrap">
+          <a href="https://wa.me/${simu}?text=${encodeURIComponent(msg)}" target="_blank" class="wa-btn share-btn" style="text-decoration:none;background:#25D366;color:white;">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            📲 Shiriki kwa WhatsApp
+          </a>
+          <button class="share-btn" style="background:#F0EDE8;color:var(--p);border:1px solid var(--br);" onclick="copyLink('${url}')">🔗 Nakili Kiungo</button>
+        </div>
+      </div>`;
+    },500);
+  }catch(e){setAl('al-search','Hitilafu: '+e.message,'e');}
+}
+
+// ═══ PUBLIC AHADI ═══
+let pubTukioId=null;
+async function tafutaTukioAhadi(){
+  const input=$('ahadi-tukio-in').value.trim().toUpperCase();
+  if(!input){toast('Ingiza nambari ya tukio');return;}
+  const r=await DB.get('matukio',`nambari_tukio=eq.${input}`);
+  if(!Array.isArray(r)||!r[0]){$('ahadi-tukio-display').innerHTML='<div class="al al-e">Tukio hili halipatikani</div>';$('ahadi-form-pub').style.display='none';return;}
+  const t=r[0];pubTukioId=t.id;
+  $('ahadi-tukio-display').innerHTML=`
+    <div style="background:linear-gradient(135deg,var(--p),#0F3460);border-radius:var(--r);padding:18px;color:white;text-align:center;margin-bottom:14px;">
+      <div style="font-size:28px;margin-bottom:8px;">${ainaIcon(t.aina)}</div>
+      <p style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:4px;">${t.jina_tukio}</p>
+      <p style="font-size:12px;opacity:0.75;">📅 ${formatTarehe(t.tarehe)} · 📍 ${t.ukumbi}</p>
+    </div>`;
+  $('ahadi-form-pub').style.display='block';
+}
+
+async function wasilishaAhadi(){
+  if(!pubTukioId){toast('Tafuta tukio kwanza');return;}
+  const jina=$('ap-jina').value.trim(),simu=$('ap-simu').value.trim(),kiasi=parseInt($('ap-kiasi').value),msg=$('ap-msg').value.trim();
+  if(!jina||!simu||!kiasi){setAl('al-ahadi-pub','Jaza sehemu zote','e');return;}
+  const r=await DB.post('ahadi',{tukio_id:pubTukioId,jina_mtoaji:jina,namba_simu:simu,kiasi,maelezo:msg,status:'ahadi',tarehe_ahadi:leo()});
+  if(Array.isArray(r)&&r[0]){
+    setAl('al-ahadi-pub',`✅ Ahadi yako ya ${pesa(kiasi)} imehifadhiwa! Asante sana kwa upendo wako 💝`,'s');
+    $('ap-jina').value='';$('ap-simu').value='';$('ap-kiasi').value='';$('ap-msg').value='';
+  }
+}
+
+// ═══ AUTO-OPEN KADI FROM URL ═══
+function checkUrlParams(){
+  const params=new URLSearchParams(window.location.search);
+  const kadi=params.get('kadi');
+  if(kadi){
+    show('s-angalia');
+    $('search-in').value=kadi.toUpperCase();
+    setTimeout(angaliaKadi,500);
+  }
+}
+
+// ═══ ADMIN TABS ═══
+function aTab(tab){
+  ['ev','wa','kd','ah','sc'].forEach(t=>{
+    const e=$('at-'+t);if(e)e.style.display=t===tab?'block':'none';
+    const b=$('at-'+t+'-btn');if(b)b.classList.toggle('active',t===tab);
+  });
+}
 
 // ═══ INIT ═══
-showScreen('screen-welcome');
+show('s-welcome');
+checkUrlParams();
 </script>
 </body>
 </html>
