@@ -6,6 +6,8 @@
 <title>E-Card Tanzania — Mfumo wa Mialiko</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
 <style>
 :root{
   --p:#1A1A2E;--pl:#16213E;--gold:#C9A84C;--gl:#FDF6E3;
@@ -601,7 +603,8 @@ function loadWageni(){
       <td><span class="badge ${w.ameingia?'bg-gr':'bg-gray'}">${w.ameingia?'✓':'—'}</span></td>
       <td>
         <button class="btn btn-g btn-sm" onclick="oneshaMgeniKadi('${w.id}')">💌 Kadi</button>
-        <button class="btn btn-sm" style="background:#25D366;color:white;margin-left:4px;" onclick="tumaWaHaraka('${w.id}')">📲 WA</button>
+        <button class="btn btn-sm" style="background:#25D366;color:white;margin-left:4px;" onclick="tumaWaHaraka('${w.id}')" title="Tuma ujumbe + kiungo WhatsApp">📲 WA</button>
+        <button class="btn btn-sm" style="background:#FF6D00;color:white;margin-left:4px;" onclick="tumaWaPichaHaraka('${w.id}')" title="Pakua kadi kama picha">🖼 Picha</button>
         <button class="btn btn-r btn-sm" onclick="futaMgeni('${w.id}')" style="margin-left:4px;">🗑</button>
       </td>
     </tr>`).join('');
@@ -671,19 +674,23 @@ function buildEcard(tukio, mgeni, containerId){
       </div>
     </div>`:''}
     ${tukio.ujumbe_ziada?`<div style="background:${R};padding:8px 16px;text-align:center;"><p style="color:${G};font-size:11px;font-style:italic;">📌 ${tukio.ujumbe_ziada}</p></div>`:''}
-    <div class="ec-footer" style="background:#FAFAF5;">
-      <div>
-        <div class="ec-card-num-lbl">Card No.</div>
-        <div class="ec-card-num" style="color:${R};">${mgeni.nambari_kadi}</div>
-        <div class="ec-table-num">
-          <div class="ec-table-lbl" style="color:${R};">Nambari ya Meza</div>
-          <div class="ec-table-val" style="color:${R};">${mgeni.nambari_meza||'—'}</div>
+    <div class="ec-footer" style="background:#FAFAF5;padding:14px 16px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+      <div style="flex:1;">
+        <div class="ec-card-num-lbl" style="font-size:9px;opacity:0.55;text-transform:uppercase;letter-spacing:0.5px;">Card No.</div>
+        <div class="ec-card-num" style="color:${R};font-family:monospace;font-size:15px;font-weight:700;margin-top:2px;">${mgeni.nambari_kadi}</div>
+        <div style="margin-top:8px;">
+          <div style="font-size:9px;opacity:0.55;text-transform:uppercase;letter-spacing:0.5px;color:${R};">Nambari ya Meza</div>
+          <div style="font-size:22px;font-weight:700;color:${R};margin-top:1px;">${mgeni.nambari_meza||'—'}</div>
+        </div>
+        <div style="margin-top:10px;">
+          <div style="font-size:9px;opacity:0.55;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Barcode</div>
+          <svg id="bc_${qid}" style="max-width:140px;display:block;"></svg>
         </div>
       </div>
-      <div class="ec-qr-wrap">
-        <canvas id="${qid}" width="80" height="80"></canvas>
-        <div class="ec-qr-lbl" style="color:#999;">Scan QR Code</div>
-        <div style="font-size:9px;color:#aaa;margin-top:2px;">Fungua kadi moja kwa moja</div>
+      <div style="text-align:center;flex-shrink:0;">
+        <canvas id="${qid}" width="90" height="90" style="display:block;border-radius:6px;border:1.5px solid rgba(0,0,0,0.08);"></canvas>
+        <div style="font-size:9px;color:#999;margin-top:4px;letter-spacing:0.5px;text-transform:uppercase;">Scan QR Code</div>
+        <div style="font-size:9px;color:#aaa;margin-top:1px;">Fungua kadi moja kwa moja</div>
       </div>
     </div>
     <div style="background:linear-gradient(90deg,${R},${G},${R});height:4px;"></div>
@@ -697,9 +704,18 @@ function buildEcard(tukio, mgeni, containerId){
 
   setTimeout(()=>{
     try{
-      QRCode.toCanvas($(qid),kadiUrl,{width:80,margin:1,color:{dark:R,light:'#FFFFFF'}},()=>{});
+      QRCode.toCanvas($(qid),kadiUrl,{width:90,margin:1,color:{dark:R,light:'#FFFFFF'}},()=>{});
     }catch(e){console.log('QR err',e);}
-  },300);
+    try{
+      if(typeof JsBarcode!=='undefined'){
+        JsBarcode('#bc_'+qid, mgeni.nambari_kadi,{
+          format:'CODE128',width:1.6,height:36,displayValue:true,
+          fontSize:10,fontOptions:'bold',lineColor:R,background:'transparent',
+          textMargin:3,margin:0
+        });
+      }
+    }catch(e){console.log('Barcode err',e);}
+  },400);
 }
 
 function hexToRgb(hex){
@@ -736,24 +752,31 @@ function showShareOptions(tukio,mgeni){
   $('kadi-share-wrap').style.display='block';
   $('kadi-share-content').innerHTML=`
     <div style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
-      <p style="font-size:12px;font-weight:700;color:#1B5E20;margin-bottom:6px;">🎟 Kiungo cha Kadi ya ${mgeni.jina_kamili}</p>
+      <p style="font-size:12px;font-weight:700;color:#1B5E20;margin-bottom:6px;">🔗 Kiungo cha Kadi ya ${mgeni.jina_kamili}</p>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <code style="background:white;border:1px solid #C8E6C9;border-radius:6px;padding:6px 10px;font-size:12px;color:#1B5E20;flex:1;word-break:break-all;">${kadiUrl}</code>
+        <code style="background:white;border:1px solid #C8E6C9;border-radius:6px;padding:6px 10px;font-size:11px;color:#1B5E20;flex:1;word-break:break-all;">${kadiUrl}</code>
         <button onclick="copyLink('${kadiUrl}')" style="background:#1B5E20;color:white;border:none;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;">📋 Nakili</button>
       </div>
     </div>
-    <div style="background:#F9F4EC;border:1px solid #E8DCC8;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
-      <p style="font-size:12px;font-weight:700;color:#5D4037;margin-bottom:8px;">📝 Ujumbe wa WhatsApp (Hakiki Kabla ya Kutuma)</p>
-      <div style="background:white;border-radius:8px;padding:12px;font-size:12px;white-space:pre-line;line-height:1.9;color:#333;max-height:180px;overflow-y:auto;border:1px solid #E8DCC8;">${msg}</div>
+
+    <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <p style="font-size:12px;font-weight:700;color:#E65100;margin-bottom:8px;">🖼 Pakua Kadi kama Picha — Tuma WhatsApp</p>
+      <p style="font-size:11px;color:#666;margin-bottom:10px;line-height:1.6;">Bonyeza <strong>"Pakua Picha"</strong> — kadi itapakuliwa kwenye simu yako kama picha. Kisha fungua WhatsApp, chagua mgeni na utume picha hiyo pamoja na ujumbe wa kiungo.</p>
+      <button onclick="pakulaPicha('kadi-build-container','${mgeni.jina_kamili}_${mgeni.nambari_kadi}')" style="width:100%;background:linear-gradient(135deg,#E65100,#FF6D00);color:white;border:none;padding:13px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        📥 Pakua Kadi kama Picha (.PNG)
+      </button>
+      ${hasSimu?`<a href="https://wa.me/${simu}?text=${encodeURIComponent(msg)}" target="_blank" style="display:flex;width:100%;background:#25D366;color:white;border:none;padding:13px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;align-items:center;justify-content:center;gap:8px;">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        📲 Fungua WhatsApp — ${mgeni.jina_kamili} (Tuma Ujumbe + Kiungo)
+      </a>`:`<div style="background:#FFF3E0;border:1px solid #FFB74D;border-radius:8px;padding:10px;font-size:12px;color:#E65100;text-align:center;">⚠ Mgeni hana namba ya simu. Ongeza namba kwenye tab ya Wageni.</div>`}
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      ${hasSimu
-        ? `<a href="https://wa.me/${simu}?text=${encodeURIComponent(msg)}" target="_blank" style="flex:1;min-width:200px;background:#25D366;color:white;border:none;padding:13px 16px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> 📲 Tuma WhatsApp — ${mgeni.jina_kamili}</a>`
-        : `<div style="flex:1;background:#FFF3E0;border:1px solid #FFB74D;border-radius:10px;padding:12px;font-size:12px;color:#E65100;text-align:center;">⚠ Mgeni hana namba ya simu. <button onclick="closeModDirect()" style="background:none;border:none;color:var(--p);font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">Ongeza namba kwenye Wageni tab.</button></div>`
-      }
-      <button onclick="copyLink('${kadiUrl}')" style="background:#F0EDE8;color:var(--p);border:1.5px solid var(--br);padding:13px 16px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">🔗 Nakili Kiungo</button>
+
+    <div style="background:#F0F8FF;border-radius:10px;padding:14px 16px;">
+      <p style="font-size:12px;font-weight:700;color:#1565C0;margin-bottom:8px;">📝 Ujumbe wa WhatsApp (Hakiki Kabla ya Kutuma)</p>
+      <div style="background:white;border-radius:8px;padding:12px;font-size:12px;white-space:pre-line;line-height:1.9;color:#333;max-height:160px;overflow-y:auto;border:1px solid #BBDEFB;">${msg}</div>
     </div>`;
 }
+
 
 function buildWaMsg(tukio,mgeni,url){
   return `Habari!, *${mgeni.jina_kamili}*\nPokea kadi yako ya Mualiko 💌\n\nKutoka kwa *${tukio.jina_mwenyeji}* wa ${tukio.mahali_mwenyeji}\n\n📅 *${formatTarehe(tukio.tarehe)}, ${tukio.saa}*\n🏛 *${tukio.ukumbi}*${tukio.dress_code?'\n👗 Dress Code: *'+tukio.dress_code+'*':''}${tukio.location_link?'\n📍 Ramani: '+tukio.location_link:''}\n\n🎟 Card No: *${mgeni.nambari_kadi}*\n🪑 Meza Nambari: *${mgeni.nambari_meza||'—'}*\n🎫 Aina ya Kadi: *${mgeni.aina_kadi}*\n\n👁 *Angalia kadi yako hapa:*\n${url}\n\n_(Scan QR code kwenye kadi yako kufungua moja kwa moja)_\n\nKARIBU SANA! 🎉🥂`;
@@ -761,6 +784,48 @@ function buildWaMsg(tukio,mgeni,url){
 
 function copyLink(url){
   navigator.clipboard.writeText(url).then(()=>toast('✅ Kiungo kimekopiwa!'));
+}
+
+async function pakulaPicha(containerId, filename){
+  const el=$(containerId);
+  if(!el){toast('Kadi haijapatikani. Ona kadi kwanza.');return;}
+  const kadiEl=el.querySelector('.ecard');
+  if(!kadiEl){toast('Hakuna kadi ya kupakua.');return;}
+  toast('⏳ Inaunda picha... subiri sekunde moja...');
+  try{
+    const canvas=await html2canvas(kadiEl,{
+      scale:2.5,
+      useCORS:true,
+      allowTaint:true,
+      backgroundColor:'#FFFBF5',
+      logging:false,
+      width:kadiEl.offsetWidth,
+      height:kadiEl.offsetHeight
+    });
+    const link=document.createElement('a');
+    link.download=(filename||'ecard')+'.png';
+    link.href=canvas.toDataURL('image/png',1.0);
+    link.click();
+    toast('✅ Picha imepakuliwa! Fungua WhatsApp na tuma picha hiyo.');
+  }catch(e){
+    toast('❌ Hitilafu ya kupakua picha. Jaribu tena.');
+    console.error('html2canvas error:',e);
+  }
+}
+
+async function tumaWaPichaHaraka(wid){
+  const mgeni=AW.find(w=>w.id===wid);
+  if(!mgeni){toast('Mgeni hakupatikana');return;}
+  const tukio=AM.find(t=>t.id===mgeni.tukio_id);
+  if(!tukio){toast('Tukio hakupatikani');return;}
+  const tempDiv=document.createElement('div');
+  tempDiv.id='temp_kadi_'+wid;
+  tempDiv.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1;';
+  document.body.appendChild(tempDiv);
+  buildEcard(tukio,mgeni,tempDiv.id);
+  await new Promise(r=>setTimeout(r,800));
+  await pakulaPicha(tempDiv.id, mgeni.jina_kamili+'_'+mgeni.nambari_kadi);
+  setTimeout(()=>document.body.removeChild(tempDiv),2000);
 }
 
 function tumaWaHaraka(wid){
